@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/des/des",
+    "pages/sort/sort",
+    "pages/search/search",
+    "pages/test/test",
+    "pages/rank/rank"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#006ACC",
+    "navigationBarTitleText": "东软学院学生作品展示",
+    "navigationBarTextStyle": "#00EE00"
+  },
+  "tabBar": {
+      "color": "#000000",
+      "selectedColor": "#FFA500",
+      "opacity": 0.5,
+      "backgroundColor": "#EAEAEA",
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "text": "首页",
+          "iconPath": "images/index1.png",
+          "selectedIconPath": "images/index.png"
+        },
+        {
+          "pagePath": "pages/rank/rank",
+          "text": "人气榜单",
+          "iconPath": "images/notice1.png",
+          "selectedIconPath": "images/notice.png"
+        }
+      ]
+    }
+}

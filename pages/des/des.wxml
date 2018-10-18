@@ -1,0 +1,88 @@
+<view class='container'>
+   
+
+
+
+  <view class='show-video'>
+    <video  src='https://www.gomi.site/videos/{{showlist.d_videourl}}' autoplay></video>
+  </view>
+  <view class='header' style='color:rgb(255, 204, 0);'>
+      <view class='end'>{{end}}</view>
+      <view class="timer">
+        <view class="time">
+          <view>{{time.day1}}</view>
+          <view>{{time.day2}}</view>
+        </view>
+        <view class="fonts">天</view>
+        <view class="time">
+          <view>{{time.hours1}}</view>
+          <view>{{time.hours2}}</view>
+        </view>
+        <view class="fonts">时</view>
+        <view class="time">
+          <view>{{time.minutes1}}</view>
+          <view>{{time.minutes2}}</view>
+        </view>
+        <view class="fonts">分</view>
+        <view class="time">
+          <view>{{time.seconds1}}</view>
+          <view>{{time.seconds2}}</view>
+        </view>
+        <view class="fonts">秒</view>
+        <view class="time">
+          <view>{{time.miseconds1}}</view>
+          <view>{{time.miseconds2}}</view>
+        </view>
+      
+      </view>
+ 
+  </view>
+  <view class='des'>
+
+    <view class='content'>
+      <view class='left'>
+        <view>
+          <text>姓名</text>
+        </view>
+        <view>
+          <text>项目名称</text>
+        </view>
+        <view>
+          <text>年级</text>
+        </view>
+        <view>
+          <text>专业</text>
+        </view>
+      </view>
+      <view class='mid'>
+        <view>
+          <text>{{showlist.d_st_name}}</text>
+        </view>
+        <view>
+          <text>{{showlist.d_name}}</text>
+        </view>
+        <view>
+          <text>{{showlist.g_name}}</text>
+        </view>
+        <view>
+          <text>{{showlist.m_name}}</text>
+        </view>
+      </view>
+      <view class='right'>
+        <image class="icon" src="https:///www.gomi.site/poster/点赞1.png" wx:if="{{showlist.iconid == 0}}" catchtap='addpiao' data-id="{{showlist.d_id}}"></image>
+          <image class="icon" src="https:///www.gomi.site/poster/点赞2.png" wx:if="{{showlist.iconid == 1}}" catchtap='addpiao' data-id="{{showlist.d_id}}"></image>
+        <view><text>得票数：{{showlist.d_count}}</text></view>
+      </view>
+    </view>
+    
+    <view class='show-des'>
+      <view class="intro">
+        <view>作品简介</view>
+      </view>
+      <view>
+        <text class="line">{{showlist.d_des}}</text>
+      </view>
+    </view>
+  </view>
+
+</view>

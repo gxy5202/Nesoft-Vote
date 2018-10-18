@@ -1,0 +1,64 @@
+<!--pages/rank/rank.wxml-->
+<view class='container'>
+   <view class='header' style='color:rgb(255, 204, 0);'>
+      <view class='end'>{{end}}</view>
+      <view class="timer">
+        <view class="time">
+          <view>{{time.day1}}</view>
+          <view>{{time.day2}}</view>
+        </view>
+        <view class="fonts">天</view>
+        <view class="time">
+          <view>{{time.hours1}}</view>
+          <view>{{time.hours2}}</view>
+        </view>
+        <view class="fonts">时</view>
+        <view class="time">
+          <view>{{time.minutes1}}</view>
+          <view>{{time.minutes2}}</view>
+        </view>
+        <view class="fonts">分</view>
+        <view class="time">
+          <view>{{time.seconds1}}</view>
+          <view>{{time.seconds2}}</view>
+        </view>
+        <view class="fonts">秒</view>
+        <view class="time">
+          <view>{{time.miseconds1}}</view>
+          <view>{{time.miseconds2}}</view>
+        </view>
+      
+      </view>
+ 
+  </view>
+  <view class="wrap">
+    <view class="title" style="background:url('/images/rank2.png') no-repeat;cover">
+        人气榜
+    </view>
+  <view class='rank' wx:for="{{rankList}}">
+    <view class='rank-list'>
+      <view class='left'>
+        <view class='NO'>
+          <text>NO.{{item.NO}}</text>
+        </view>
+        <view class='pic'>
+          <image src='https://www.gomi.site/poster/{{item.d_imgurl}}' mode='aspectFill'></image>
+        </view>
+        <view class='content'>
+          <view class='name'>
+            <text>{{item.d_name}}</text>
+          </view>
+          <view class='id'>{{item.d_id}}号</view>
+           <view class='count'>
+            <text decode="{{true}}">票数:&nbsp;&nbsp;&nbsp;{{item.d_count}}</text>
+          </view>
+        </view>
+      </view>
+      <!-- <view class='right'>
+        <text decode="{{true}}">票数:&nbsp;&nbsp;&nbsp;{{item.num}}</text>
+      </view> -->
+    </view>
+  </view>
+  </view>
+  
+</view>

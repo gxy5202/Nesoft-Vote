@@ -1,0 +1,40 @@
+<!--pages/search/search.wxml-->
+<view class='container'>
+
+  <view class='search'>
+    <view class='search-input'>
+      <input type="search" placeholder='输入作品编号、名称、作者~~' value="" auto-focus="true" confirm-type="doneconfirm-type" bindinput="getNumber"></input>
+      <icon class='iconfont icon-search'></icon>
+    </view>
+  </view>
+  <view class='show'>
+    <view class='show-item' wx:for="{{showlist}}" bindtap='todes' data-index='{{index}}' data-id='{{item.d_id}}'>
+      <view class='show-pic'>
+        <image src='https://www.gomi.site/poster/{{item.d_imgurl}}' mode='aspectFill'></image>
+      </view>
+      <view class='show-content'>
+        <view class='up'>
+          <view class='up-showname'>
+            <text>{{item.d_name}}</text>
+          </view>
+          <view class='up-name'>
+            <text>{{item.d_st_name}}</text>
+          </view>
+          <view class='up-showdes'>
+            <text>{{item.d_des}}</text>
+          </view>
+        </view>
+        <view class='down'>
+          <view class='left'>
+            <text>{{item.d_count}}</text>
+          </view>
+          <image class="icon" src="https://www.gomi.site/poster/点赞1.png" wx:if="{{item.iconid == 0}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+          <image class="icon" src="https://www.gomi.site/poster/点赞2.png" wx:if="{{item.iconid == 1}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='bottom'>
+     <text>再翻也没有啦~~</text>
+  </view>
+</view>

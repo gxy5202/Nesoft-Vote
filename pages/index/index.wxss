@@ -1,0 +1,473 @@
+@import "../../css/iconfont.wxss";
+page {
+  height: 100%;
+  background: rgba(243,243,243,.3);
+}
+.container {
+  width: 100%;
+  
+  position: relative;
+  font-family: "微软雅黑"
+}
+.mask {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+.mask .tips h1 {
+  font-size: 40rpx;
+  font-weight: bolder;
+}
+.mask .tips {
+  position: absolute;
+  margin:auto;
+  left: 0;
+  right:0;
+  top: 0;
+  bottom: 0;
+  padding: 20rpx;
+  width:80%;
+  height: 600rpx;
+  background: white;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 30rpx;
+  
+}
+.mask .none {
+   position: absolute;
+   margin:auto;
+   left: 0;
+   right:0;
+   bottom: 100rpx;
+   width: 80%;
+   height: 60rpx;
+   text-align: center;
+}
+.mask .none image {
+  width: 60rpx;
+  height: 60rpx
+}
+#topSwiper {
+  height: 500rpx;
+  position: relative;
+}
+
+#topTitle {
+  position: absolute;
+  top: 200rpx;
+  height: 100rpx;
+  width: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.2);
+  color: rgb(255, 204, 0);
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+#topTitle  text {
+  display: block;
+}
+
+swiper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+swiper-item {
+  height: 500rpx;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-pic {
+  height: 100%;
+  width: 100%;
+}
+
+.banner-pic image {
+  height: 100%;
+  width: 100%;
+}
+
+.search {
+  height: 120rpx;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.search-input {
+  background-color: rgb(255, 255, 255);
+  border-radius: 30rpx;
+  box-shadow: 0px 0px 1px #706f6f;
+  margin-top: 30rpx;
+  height: 50%;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10pt;
+  opacity: 0.6;
+}
+
+.icon-search {
+  font-size: 50rpx;
+}
+
+.productHeader {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 70rpx;
+  background-color: rgb(235, 243, 245);
+  color: #bdbdbd;
+  font-size: 33rpx;
+  margin: -30rpx 0 -18rpx 0;
+}
+
+.productHeader .left {
+  height: 100%;
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 5rpx;
+}
+
+.productHeader .red {
+  height: 70%;
+  width: 3%;
+  background-color: red;
+  margin-left: 5rpx;
+}
+
+.productHeader .right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 15%;
+  margin-right: 5rpx;
+}
+
+.show {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.show-item {
+  height: 296rpx;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 20rpx 15rpx;
+  background-color: rgb(255, 255, 255);
+  border-radius: 20rpx;
+  box-shadow: 0px 6px 10px /*#706f6f*/ rgba(0, 0, 0, 0.2);
+  
+}
+.show-item:hover {
+  animation: clickShow .5s ease-in-out;
+}
+
+.show-item .show-pic {
+  height: 296rpx;
+  width: 250rpx;
+}
+
+.show-item .show-pic image {
+  height: 296rpx;
+  width: 250rpx;
+  border-radius: 20rpx 0rpx 0rpx 20rpx;
+}
+
+.show-content {
+  height: 300rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: 20rpx;
+}
+
+.show-content .up-name text {
+  font-size: 28rpx;
+  /* color: rgb(255,204,0);   */
+  color: #ffa500;
+}
+
+.show-content .up-showname text {
+  font-size: 33rpx;
+  color: #2e2e2e;
+  /* color: #FFA500; */
+  font-weight: bold;
+
+}
+.show-content .up-showdes {
+  text-overflow:ellipsis;
+  white-space: wrap;
+  overflow: hidden;
+}
+.show-content .up-showdes text {
+  font-size: 25rpx;
+  color: #878787;
+  overflow : hidden;    
+  text-overflow: ellipsis;    
+  display: -webkit-box;    
+  -webkit-line-clamp: 3;    
+  -webkit-box-orient: vertical;    
+  word-break: break-all; /* 追加这一行代码 */
+}
+
+.show-content .up {
+  height: 70%;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.show-content .down {
+  height: 20%;
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 10rpx;
+}
+
+.show-content .down .left {
+  margin: 0 10rpx;
+}
+
+.show-content .down .left text {
+  font-size: 10pt;
+  color: #ffa500;
+  /* color:rgb(255,204,0); */
+}
+
+.icon-favorite {
+  font-size: 30rpx;
+  color: red;
+}
+
+.bottom {
+  height: 60rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(235, 243, 245);
+  border-top: 1rpx solid rgb(193, 193, 193);
+}
+
+.bottom text {
+  font-size: 25rpx;
+  color: #bdbdbd;
+}
+
+/* .choose {
+  background-color: rgb(255,255,255);
+  height: 60rpx;
+  width: 90%;
+  display: flex;
+  margin:30rpx auto 20rpx auto;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  left: 0;
+  right: 0;
+  border-radius: 30rpx;
+  box-shadow: 0px 0px 3px #706f6f;
+  /* border-top: 1rpx solid #7CFC00;
+  border-bottom:1rpx solid #7CFC00; 
+  font-size: 10pt;
+  line-height: 40rpx;
+  color: rgba(0, 0, 0, 0.747);
+  
+  font-family: "微软雅黑"
+  
+}
+
+.chooseItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  height: 100%;
+  text-align: center;
+}
+.chooseItem image {
+  width: 40rpx;
+  height: 40rpx;
+}
+.chooseItem:first-child {
+  border-right: 2px solid #ffa500;
+}
+
+.chooseItem-list {
+  margin-top: 50rpx;
+  height: 300rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  border-radius: 15rpx;
+  position: absolute;
+  top: 40rpx;
+  
+  color:white;
+  z-index: 2000;
+}
+
+.chooseItem-list view {
+  
+  border: 1rpx solid rgb(255,255,255);
+  border-radius: 30rpx;
+  height: 60rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.showHidden {
+  width: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.8);
+  z-index: 1000;
+  filter: brightness(3px)
+} */
+.pick {
+  background-color: rgb(255,255,255);
+  height: 60rpx;
+  width: 90%;
+  display: flex;
+  margin:30rpx auto 20rpx auto;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  left: 0;
+  right: 0;
+  border-radius: 30rpx;
+  
+  /* border-top: 1rpx solid #7CFC00;
+  border-bottom:1rpx solid #7CFC00; */
+  font-size: 30rpx;
+  line-height: 40rpx;
+  color: rgba(0, 0, 0, 0.747);
+  /*font-family: STxinwei;*/
+  font-family: "微软雅黑";
+  box-shadow: 0px 4px 8px /*#706f6f*/ rgba(0, 0, 0, 0.2);
+}
+.picker-item {
+  
+  margin:auto 30rpx;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+.picker-item image {
+  width: 45rpx;
+  height: 45rpx;
+  vertical-align: middle;
+}
+.icon {
+  width: 50rpx;
+  height: 50rpx;
+}
+.icon:hover {
+  animation: move .5s;
+}
+.iconfont:hover{
+  animation: move .5s;
+}
+@keyframes move {
+  0%{
+    transform: scale(1) rotate(0deg);
+  }
+  50%{
+    transform: scale(1.3) rotate(-45deg);
+  }
+  100%{
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes show {
+  0%{
+    transform: translateY(500rpx);
+  }
+  100%{
+    transform: translateY(0rpx);
+  }
+}
+@keyframes clickShow {
+  0%{
+    transform: scale(1);
+  }
+  30%{
+    transform: scale(1.1);
+  }
+  70%{
+    transform: scale(0.9);
+  }
+  90% {
+    transform: scale(1.03);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
+.scrollTop {
+ 
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right:40rpx;
+  right: 10rpx;
+  bottom: 30rpx;
+  z-index: 999;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: rgba(255,255,255,.5);
+  box-shadow: 0 0 20rpx rgba(255,255,255,.8); 
+  
+}
+.scrollTop image {
+  width: 60rpx;
+  height: 60rpx;
+}

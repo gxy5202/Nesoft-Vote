@@ -1,0 +1,35 @@
+<!--pages/sort/sort.wxml-->
+<view class='container'>
+
+  <view class='show'>
+    <view class='show-item' wx:for="{{showlist}}" bindtap='todes' data-index='{{index}}'>
+      <view class='show-pic'>
+        <image src='{{item.imgSrc}}'></image>
+      </view>
+      <view class='show-content'>
+        <view class='up'>
+          <view class='up-showname'>
+            <text>{{item.showname}}</text>
+          </view>
+          <view class='up-name'>
+            <text>{{item.name}}</text>
+          </view>
+          <view class='up-showdes'>
+            <text>{{item.showdes}}</text>
+          </view>
+        </view>
+        <view class='down'>
+          <view class='left'>
+            <text>{{item.piao}}</text>
+          </view>
+          <icon class='iconfont icon-favorite' color='red'></icon>
+        </view>
+      </view>
+    </view>
+  </view>
+
+<view class='bottom'>
+    <text>再翻也没有啦~~</text>
+  </view>
+
+</view>

@@ -1,0 +1,108 @@
+@import "../../css/iconfont.wxss";
+
+.container {
+  width: 100%;
+  background-color: rgb(235, 243, 245);
+}
+
+.show {
+  height: 2000rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.show-item {
+  height: 400rpx;
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin: 20rpx 15rpx;
+  background-color: rgb(255, 255, 255);
+  border-radius: 20rpx;
+  box-shadow: 0px 0px 3px #706f6f;
+}
+
+.show-item .show-pic {
+  height: 296rpx;
+  width: 250rpx;
+}
+
+.show-item .show-pic image {
+  height: 296rpx;
+  width: 250rpx;
+  border-radius: 20rpx 0rpx 0rpx 20rpx;
+}
+
+.show-content {
+  height: 300rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: 20rpx;
+}
+
+.show-content .up-name text {
+  font-size: 28rpx;
+  color: #555;
+}
+
+.show-content .up-showname text {
+  font-size: 33rpx;
+  color: #2e2e2e;
+}
+
+.show-content .up-showdes text {
+  font-size: 25rpx;
+  color: #878787;
+}
+
+.show-content .up {
+  height: 240rpx;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 10rpx;
+}
+
+.show-content .down {
+  height: 50rpx;
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 10rpx;
+}
+
+.show-content .down .left {
+  margin: 0 10rpx;
+}
+
+.show-content .down .left text {
+  color: #121212;
+}
+
+.icon-favorite {
+  font-size: 30rpx;
+  color: red;
+}
+
+.bottom {
+  height: 60rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(235, 243, 245);
+  border-top: 1rpx solid rgb(193, 193, 193);
+  font-size: 25rpx;
+  color: #bdbdbd;
+}

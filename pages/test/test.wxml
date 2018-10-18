@@ -1,0 +1,26 @@
+<!--pages/test/test.wxml-->
+<view class='productHeader'>
+  <view class='left'>
+    <text decode="{{true}}">&nbsp;&nbsp;年级</text>
+  </view>
+  <view class='red'> </view>
+  <view class='right'>
+    <view>
+      <text>专业</text>
+    </view>
+  </view>
+</view>
+<view class='sort'>
+  <view>
+    <text>2018级</text>
+  </view>
+  <view>
+    <text>2017级</text>
+  </view>
+  <view>
+    <text>2016级</text>
+  </view>
+  <view>
+    <text>2015级</text>
+  </view>
+</view>
