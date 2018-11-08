@@ -1,7 +1,7 @@
 @import "../../css/iconfont.wxss";
 .container {
   width: 100%;
-  background-color: rgb(235, 243, 245);
+  background: rgba(243,243,243,.3);
 }
 
 .search {
@@ -10,27 +10,118 @@
   display: flex;
   justify-content: center;
 }
+.hot_title {
+  width: 90%;
+  margin: auto;
+  font-size: 40rpx;
+  text-align: center;
+}
+.hot_title image {
+  width: 50rpx;
+  height: 50rpx;
+}
+.hot {
+  width: 90%;
+  height: 700rpx;
+  margin: 30rpx auto;
+  
+  display: flex;
+  justify-content: space-between;
+  align-content: space-around;
+  flex-wrap: wrap;
+}
+.hot view {
+  height: 200rpx;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:white;
+  box-shadow: 0px 6px 10px /*#706f6f*/ rgba(0, 0, 0, 0.2);
+}
+.hot view:nth-child(1){
+  width: 40%;
+  height: 200rpx; 
+  background: #56CCF2;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+}
+.hot view:nth-child(2){
+  width: 57%;
+  background: #43cea2;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #185a9d, #43cea2);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #185a9d, #43cea2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
+
+  
+}
+.hot view:nth-child(3){
+  width: 57%;
+background: #1488CC;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #2B32B2, #1488CC);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #2B32B2, #1488CC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+ 
+}
+.hot view:nth-child(4){
+  width: 40%;
+  background: #4776E6;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #8E54E9, #4776E6);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #8E54E9, #4776E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+  
+}
+.hot view:nth-child(5){
+  width: 100%;
+  background: #00d2ff;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #3a7bd5, #00d2ff);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #3a7bd5, #00d2ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  
+}
 .search-input {
-  background-color: rgb(255, 255, 255);
-  border-radius: 30rpx;
-  box-shadow: 0px 0px 1px #706f6f;
+  
   margin-top: 30rpx;
   height: 50%;
   width: 90%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  
 }
-
+.search-input::after{
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: black;
+  animation: slide .6s linear;
+}
+@keyframes slide{
+  0%{
+    transform: scaleX(0)
+  }
+  100%{
+    transform: scaleX(1)
+  }
+}
+.search-input image{
+  width: 40rpx;
+  height: 40rpx;
+}
+.search-input image:hover {
+  animation: move .5s ease-in-out;
+}
 input{
+  
   width: 80%;
   font-size: 30rpx;
 }
 
-.icon-search {
-  font-size: 50rpx;
-}
+
 .show {
   width: 100%;
   display: flex;
@@ -60,20 +151,48 @@ input{
     transform: translateX(0rpx);
   }
 }
-.show-item .show-pic {
-  height: 296rpx;
-  width: 250rpx;
-}
 
-.show-item .show-pic image {
+.show-item .show-pic {
+  position: relative;
   height: 296rpx;
   width: 250rpx;
   border-radius: 20rpx 0rpx 0rpx 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.show-item .show-pic .img {
+  position: absolute;
+  height: 296rpx;
+  width: 250rpx;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  border-radius: 20rpx 0rpx 0rpx 20rpx;
+  z-index: 99;
+}
+.imgLoad {
+  height: 100rpx;
+  width: 100rpx;
+  margin:auto;
+  z-index: 1;
+  animation: loading 3s linear infinite;
+}
+@keyframes loading {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
 
 .show-content {
   height: 300rpx;
-  width: 100%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -85,6 +204,12 @@ input{
   font-size: 28rpx;
   /* color: rgb(255,204,0);   */
   color: #ffa500;
+  overflow : hidden;    
+  text-overflow: ellipsis;    
+  display: -webkit-box;    
+  -webkit-line-clamp: 1;    
+  -webkit-box-orient: vertical;    
+  word-break: break-all; /* 追加这一行代码 */
 }
 
 .show-content .up-showname text {
@@ -92,11 +217,23 @@ input{
   color: #2e2e2e;
   /* color: #FFA500; */
   font-weight: bold;
+  overflow : hidden;    
+  text-overflow: ellipsis;    
+  display: -webkit-box;    
+  -webkit-line-clamp: 1;    
+  -webkit-box-orient: vertical;    
+  word-break: break-all; /* 追加这一行代码 */
 }
 
 .show-content .up-showdes text {
   font-size: 25rpx;
   color: #878787;
+  overflow : hidden;    
+  text-overflow: ellipsis;    
+  display: -webkit-box;    
+  -webkit-line-clamp: 3;    
+  -webkit-box-orient: vertical;    
+  word-break: break-all; /* 追加这一行代码 */
 }
 
 .show-content .up {
@@ -115,24 +252,31 @@ input{
   height: 20%;
   width: 95%;
   display: flex;
-  flex-direction: row;
+  
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 10rpx;
 }
-
+.number {
+  font-size: 30rpx;
+  color: #ffa500;
+  margin-bottom:-5rpx;
+}
 .show-content .down .left {
-  margin: 0 10rpx;
+  margin-right:10rpx;
+  margin-bottom:-5rpx;
 }
 
 .show-content .down .left text {
-  font-size: 10pt;
+  margin-right: 5rpx;
+  font-size: 30rpx;
   color: #ffa500;
   /* color:rgb(255,204,0); */
 }
 .icon {
-  width: 50rpx;
-  height: 50rpx;
+  width: 45rpx;
+  height: 45rpx;
+  margin-bottom:-5rpx;
 }
 .icon:hover {
   animation: move .5s;
@@ -149,7 +293,7 @@ input{
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: rgb(235, 243, 245);
+  background: rgba(243,243,243,.3);
   border-top: 1rpx solid rgb(193, 193, 193);
 }
 
@@ -157,9 +301,7 @@ input{
   font-size: 25rpx;
   color: #bdbdbd;
 }
-.iconfont:hover{
-  animation: move .5s;
-}
+
 @keyframes move {
   0%{
     transform: scale(1) rotate(0deg);

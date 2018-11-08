@@ -4,16 +4,16 @@ const app = getApp()
 
 Page({
   data: {
+    openid: app.globalData.openid,
+    fixed: "relative",    //是否固定导航栏
+    top:"0",
+    opacity:"0",
+    translate:"translateY(50px)",
     hiddenHeight: 0,
     selected: 0,
     display:"block",
-    bannerlist: [{
-      imgSrc: "http://img2.imgtn.bdimg.com/it/u=3663989430,1044748734&fm=26&gp=0.jpg"
-    }, {
-        imgSrc: "/images/e017.jpg"
-    }, {
-        imgSrc: "/images/e018.jpg"
-    }],
+    bannerlist: [],
+    tipslist:[],    
     showlist: [],
     range: [['全部', '2015级', "2016级", "2017级"], ["全部", "信息系统", "电子商务", "物流管理"]],
     index:[0,0],
@@ -51,17 +51,52 @@ Page({
     
 
   },
-  onLoad:function(){
-    
+  onLoad:function(options){
+    var that = this
+    wx.request({
+      url: 'https://www.gomi.site/img',
+      header: {
+        'content-type': 'application/json'
+      },
+      success:function(res){
+        console.log(res.data)
+        that.setData({
+          [`bannerlist[${0}]`]: res.data[1],
+          [`bannerlist[${1}]`]: res.data[2],
+          [`bannerlist[${2}]`]: res.data[3],
+          [`tipslist[${0}]`]: res.data[4],
+          [`tipslist[${1}]`]: res.data[5]
+        })
+      },
+      fail: function () {
+        wx.showModal({
+          title: '提示',
+          content: '读取数据失败，请检查网络或联系小程序管理人员',
+          confirmColor: "#006ACC",
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+      }
+      
+    })
   },
   onShow:function(){
     var that = this
-    /*
-    wx.showLoading({
-      title: '正在加载',
-    })
-    */
-    
+    var key = wx.getStorageSync("key"); 
+    var index = that.data.index
+    var grade = that.data.range[0][index[0]]
+    var major = that.data.range[1][index[1]]
+    var finalSelect = {
+      grade: grade,
+      major: major
+    }
+    var arr = [];
+    console.log(finalSelect.grade)
       wx.login({
         success: res => {
           console.log(res.code)
@@ -69,61 +104,208 @@ Page({
             url: 'https://www.gomi.site/data',
             data: {
               code: res.code,
-              Appid: "wxd680d257e52cab2b",
-              AppSecret: "19e9721f2131505d1f4d83966a155ed4",
+              Appid: "wx9e7455bc8709d727",
+              AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
             },
             header: {
               'content-type': 'application/json'
             },
             success: function (next) {
+              var showlist = that.data.showlist
               console.log(next.data)
-              that.setData({
-                showlist: next.data
-              })
-              /*
-              wx.hideLoading(
-  
-              )
-              */
+              if (finalSelect.grade != "全部" || finalSelect.major != "全部"){
+                for (var i in showlist) {
+                  if (showlist[i].d_id == key.d_id) {
+                    that.setData({
+                      [`showlist[${i}].d_count`]: key.d_count,
+                      [`showlist[${i}].iconid`]: key.iconid
+                    })
+                  }
+                }
+              } else {
+                that.setData({
+                  showlist: next.data,
+
+                  [`index[${0}]`]: 0,
+
+                  [`index[${1}]`]: 0,
+                })
+
+              }
+             
+              // if (finalSelect.grade != "全部" || finalSelect.major != "全部"){
+              //   for(let x in next.data){
+              //     if (finalSelect.grade == next.data[x].g_name && finalSelect.major == next.data[x].m_name) {
+              //       arr.push(next.data[x])
+              //       for(let i in arr){
+              //         if (arr[i].d_id == showlist[i].d_id && arr[i].d_count != showlist[i].d_count) {
+              //           that.setData({
+              //             [`showlist[${i}]`]: arr[i]
+              //           })
+              //         }
+              //       }
+                    
+                    
+              //     } else if (finalSelect.grade == next.data[x].g_name && finalSelect.major == "全部"){
+              //       arr.push(next.data[x])
+              //       for (let i in arr) {
+              //         if (arr[i].d_id == showlist[i].d_id && arr[i].d_count != showlist[i].d_count) {
+              //           that.setData({
+              //             [`showlist[${i}]`]: arr[i]
+              //           })
+              //         }
+              //       }
+                    
+              //     } else if (finalSelect.major == next.data[x].m_name && finalSelect.grade == "全部") {
+              //       arr.push(next.data[x])
+              //       for (let i in arr) {
+              //         if (arr[i].d_id == showlist[i].d_id && arr[i].d_count != showlist[i].d_count) {
+              //           that.setData({
+              //             [`showlist[${i}]`]: arr[i]
+              //           })
+              //         }
+              //       }
+                  
+              //     }
+              //   }
+              // }
+              
             }
           })
-        }
+        },
+     
       });                   
-    
-                                                                                  
+                                                                               
   },
-  onReady:function(){
-  
+  onHide:function(){
+ 
+  },
+  onPullDownRefresh:function(){
+    wx.showNavigationBarLoading();
+    wx.showLoading({
+      title: '刷新中...',
+    })
+    var that = this
+    var index = that.data.index
+    var grade = that.data.range[0][index[0]]
+    var major = that.data.range[1][index[1]]
+    var finalSelect = {
+      grade: grade,
+      major: major
+    }
+    var arr = [];
+    wx.login({
+      success: res => {
+        console.log(res.code)
+        wx.request({
+          url: 'https://www.gomi.site/data',
+          data: {
+            code: res.code,
+            Appid: "wx9e7455bc8709d727",
+            AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            console.log(res.data)
+            var arr = []
+            var noarr = []
+            for (var x in res.data) {
+              if (finalSelect.grade == res.data[x].g_name && finalSelect.major == res.data[x].m_name) {
+                console.log(res.data[x])
+                arr.push(res.data[x])
+                that.setData({
+                  'showlist': arr
+                })
+                console.log(that.data.showlist)
+              }
+              else if (finalSelect.major == res.data[x].m_name && finalSelect.grade == "全部") {
+                console.log(res.data[x])
+                arr.push(res.data[x])
+                that.setData({
+                  'showlist': arr
+                })
+                console.log(that.data.showlist)
+              }
+              else if (finalSelect.major == "全部" && finalSelect.grade == res.data[x].g_name) {
+                console.log(res.data[x])
+                arr.push(res.data[x])
+                that.setData({
+                  'showlist': arr
+                })
+                console.log(that.data.showlist)
+              }
+              else if (finalSelect.major == "全部" && finalSelect.grade == "全部") {
 
-        
-        
-        /*
-        var time = new Date(res.data[0].t_end_time);
-        var now= new Date();
-        var restTime = time-now;
-        var day = restTime / 1000 / 60 / 60 / 24;
-        var hours = ((day) - parseInt(day)) * 24;
-        var minutes = (((hours) - (parseInt(hours))) * 60) - parseInt(((hours) - (parseInt(hours))) * 60);
-        var newTime = parseInt(day) + "天" + parseInt(hours) + "小时" + parseInt(((hours) - (parseInt(hours))) * 60) + "分钟" + minutes * 60 +"秒";
-        
-        console.log(newTime)
-        console.log(minutes*60)
-        /*
-        var timer = setInterval(function(){
-          var time = new Date(res.data[0].t_end_time);
-          var now = new Date();
-          var restTime = time - now;
-          var day = restTime / 1000 / 60 / 60 / 24;
-          var hours = ((day) - parseInt(day)) * 24;
-          var minutes = (((hours) - (parseInt(hours))) * 60) - parseInt(((hours) - (parseInt(hours))) * 60);
-          var newTime = parseInt(day) + "天" + parseInt(hours) + "小时" + parseInt(((hours) - (parseInt(hours))) * 60) + "分钟" + parseInt(minutes * 60) + "秒";
-          console.log(newTime)
-          
-        },1000)
-        */
-        
-        
-      
+                that.setData({
+                  'showlist': res.data
+                })
+                console.log(that.data.showlist)
+              }
+              else if (finalSelect.grade != res.data[x].g_name || finalSelect.major != res.data[x].m_name) {
+
+                noarr.push(res.data[x])
+                if (noarr.length == res.data.length)
+                  that.setData({
+                    'showlist': []
+                  })
+                console.log(noarr)
+              }
+            }
+
+          }
+        })
+      }
+    });
+    wx.stopPullDownRefresh();
+    wx.hideNavigationBarLoading();
+    wx.hideLoading()
+  },
+  onPageScroll:function(res){
+    var that = this
+    wx.createSelectorQuery().select('#topSwiper').boundingClientRect(function (rect) {
+      console.log(rect.bottom)
+      scrollOffset: true
+      if (rect.bottom < 0) {
+
+        that.setData({
+          fixed: "fixed",
+          top: "-20rpx",
+          opacity: "1",
+          translate: "translateY(0)"
+        })
+
+      } else if (rect.bottom > 0) {
+        that.setData({
+          fixed: "relative",
+          top: "0",
+          opacity: "0",
+          translate: "translateY(50px)"
+        })
+      }
+
+
+    }).exec()
+  },
+  
+  onReady:function(){
+    var that = this
+    var openid = that.data.openid
+    
+  },
+  onShareAppMessage: function () {
+    return {
+      title: "快来参与51校园展",
+      path: "/pages/des/des?id=" + id,
+      imageUrl: "../../images/51.png",
+      success: function (res) {
+        console.log("转发成功", res);
+      },
+      fail: function (res) {
+        console.log("转发失败", res);
+      }
+    }
   },
   tap1Func: function (e) {
     var that = this;
@@ -199,7 +381,7 @@ Page({
           data: date,
         })
         wx.navigateTo({
-          url: '/pages/des/des?id='+ id
+          url: '/pages/des/des?id='+id
         });
         console.log(id)
       }
@@ -228,8 +410,8 @@ Page({
           url: 'https://www.gomi.site/data',
           data: {
             code: res.code,
-            Appid: "wxd680d257e52cab2b",
-            AppSecret: "19e9721f2131505d1f4d83966a155ed4",
+            Appid: "wx9e7455bc8709d727",
+            AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
           },
           header: {
             'content-type': 'application/json'
@@ -287,150 +469,7 @@ Page({
     });
   
   },
-  //选择专业
-  /*
-  majorclicks: function (e) {
-    var that = this
-    console.log(e)
-    var index = e.currentTarget.dataset.index;
-    let name = that.data.majorlist[index].name;
-    var showlist = that.data.showlist
-    var finalSelect = that.data.finalSelect
-    that.setData({
-      major: name,
-      selected: 0,
-      'finalSelect.major':name
-    })
-    console.log(finalSelect)
 
-    wx.request({
-      url: 'http://localhost:8080/data',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        console.log(res.data)
-        var arr = []
-        var noarr = []
-        for (var x in res.data) {
-          if (finalSelect.grade == res.data[x].g_name && finalSelect.major == res.data[x].m_name) {
-            console.log(res.data[x])
-            arr.push(res.data[x])
-            that.setData({
-              'showlist': arr
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.major == res.data[x].m_name && finalSelect.grade == "全部") {
-            console.log(res.data[x])
-            arr.push(res.data[x])
-            that.setData({
-              'showlist': arr
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.major == "全部" && finalSelect.grade == res.data[x].g_name) {
-            console.log(res.data[x])
-            arr.push(res.data[x])
-            that.setData({
-              'showlist': arr
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.major == "全部" && finalSelect.grade == "全部") {
-            
-            that.setData({
-              'showlist': res.data
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.grade != res.data[x].g_name || finalSelect.major != res.data[x].m_name) {
-
-            noarr.push(res.data[x])
-            if (noarr.length == res.data.length)
-              that.setData({
-                'showlist': []
-              })
-            console.log(noarr)
-          }
-        }
-
-
-      }
-    });
-  },
-  //选择年级
-  gradeclicks: function (e) {
-    var that = this
-    console.log(e)
-    var index = e.currentTarget.dataset.index;
-    var name = that.data.gradelist[index].name;
-    var finalSelect = that.data.finalSelect
-    that.setData({
-      grade: name,
-      selected: 0,
-      'finalSelect.grade': name
-    })
-    console.log(finalSelect)
-   //向数据库发送请求，查询满足条件的作品
-    wx.request({
-      url: 'http://localhost:8080/data',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        console.log(res.data)
-        var arr = []
-        var noarr= []
-        for (var x in res.data) {
-          if (finalSelect.grade == res.data[x].g_name && finalSelect.major == res.data[x].m_name) {
-            console.log(res.data[x])
-            arr.push(res.data[x])
-            that.setData({
-              'showlist': arr
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.grade == res.data[x].g_name && finalSelect.major == "全部"){
-            console.log(res.data[x])
-            arr.push(res.data[x])
-            that.setData({
-              'showlist': arr
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.grade == "全部" && finalSelect.major == res.data[x].m_name) {
-            console.log(res.data[x])
-            arr.push(res.data[x])
-            that.setData({
-              'showlist': arr
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.major == "全部" && finalSelect.grade == "全部") {
-
-            that.setData({
-              'showlist': res.data
-            })
-            console.log(that.data.showlist)
-          }
-          else if (finalSelect.grade != res.data[x].g_name || finalSelect.major != res.data[x].m_name) {
-            
-            noarr.push(res.data[x])
-            if(noarr.length == res.data.length)
-            that.setData({
-              'showlist': []
-            })
-            console.log(noarr)
-          }
-          
-        }
-
-        
-      }
-    });
-  },
-  */
   //投票功能
   addpiao: function (e) {
     var that = this
@@ -456,8 +495,8 @@ Page({
                 url: 'https://www.gomi.site/user',
                 data: {
                   code: res.code,
-                  Appid: "wxd680d257e52cab2b",
-                  AppSecret: "19e9721f2131505d1f4d83966a155ed4",
+                  Appid: "wx9e7455bc8709d727",
+                  AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
                   id: id
                 },
                 header: {
@@ -468,7 +507,11 @@ Page({
                     if (id == showlist[x].d_id) {
                       that.setData({
                         [`showlist[${x}].d_count`]: next.data.data[0].d_count,
-                        [`showlist[${x}].iconid`]: next.data.iconid
+                        [`showlist[${x}].iconid`]: next.data.iconid,
+                      })
+                      wx.setStorage({
+                        key: 'key',
+                        data: showlist[x],
                       })
                     }
                   }
@@ -496,10 +539,33 @@ Page({
     })
   },
   topScroll: function () {
+    var that = this
     wx.pageScrollTo({
       scrollTop: 0,
       duration: 300
     })
-  }
+    that.setData({
+      fixed: "relative",
+      top: "0",
+      opacity: "0",
+      translate: "translateY(50px)"
+    })
+  },
+  onShareAppMessage: function (query) {
+    var that = this;
+    return {
+      title: "我在参与51校园展",
+      path: "/pages/index/index",
+      imageUrl: "../../images/51.png",
+      success: function (res) {
+        console.log("转发成功", res);
+      },
+      fail: function (res) {
+        console.log("转发失败", res);
+      }
+    }
+  },
+  //获取到顶部距离
+  
 
 })

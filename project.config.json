@@ -5,15 +5,16 @@
 	},
 	"setting": {
 		"urlCheck": true,
-		"es6": true,
+		"es6": false,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"nodeModules": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.3.0",
-	"appid": "wxd680d257e52cab2b",
-	"projectname": "show1",
+	"libVersion": "2.3.2",
+	"appid": "wx9e7455bc8709d727",
+	"projectname": "51vote",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
@@ -36,7 +37,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 8,
 			"list": [
 				{
 					"id": -1,
@@ -77,7 +78,22 @@
 				{
 					"id": -1,
 					"name": "index",
-					"pathName": "pages/index/index"
+					"pathName": "pages/index/index",
+					"query": ""
+				},
+				{
+					"id": 7,
+					"name": "code",
+					"pathName": "pages/des/des",
+					"query": "scene=033",
+					"scene": "1012"
+				},
+				{
+					"id": -1,
+					"name": "rankSelect",
+					"pathName": "pages/rankSelect/rankSelect",
+					"query": "",
+					"scene": "1012"
 				}
 			]
 		}

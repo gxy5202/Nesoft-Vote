@@ -1,1 +1,6 @@
-{}
+{
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#006ACC",
+  "navigationBarTitleText": "人气榜",
+  "navigationBarTextStyle": "white"
+}

@@ -3,14 +3,24 @@
 
   <view class='search'>
     <view class='search-input'>
-      <input type="search" placeholder='输入作品编号、名称、作者~~' value="" auto-focus="true" confirm-type="doneconfirm-type" bindinput="getNumber"></input>
-      <icon class='iconfont icon-search'></icon>
+      <input type="search" placeholder='输入作品编号、名称、参赛类型或作者' value="{{value}}" focus="true" confirm-type="doneconfirm-type" bindconfirm="getNumber" bindinput='getLength' bconfirm-type="search"  ></input>
+      <image src='../../images/search3.png' bindtap="imgSearch"></image>
     </view>
   </view>
-  <view class='show'>
+  <view class="hot_title" style='display:{{display}}'>
+  热门搜索
+  <image src='../../images/hot.png'></image>
+  </view>
+  <view class='hot' style='display:{{display}}'>
+    
+    <view bindtap="toSearch" wx:for="{{hotName}}" data-name="{{item.search_name}}">{{item.search_name}}</view>
+    
+  </view>
+   <view class='show' style='display:{{block}}'>
     <view class='show-item' wx:for="{{showlist}}" bindtap='todes' data-index='{{index}}' data-id='{{item.d_id}}'>
       <view class='show-pic'>
-        <image src='https://www.gomi.site/poster/{{item.d_imgurl}}' mode='aspectFill'></image>
+        <image class="imgLoad" src='../../images/loading.png'  lazy-load='true' ></image>
+        <image class="img" src='{{item.d_imglink}}' mode='aspectFill'></image>
       </view>
       <view class='show-content'>
         <view class='up'>
@@ -25,15 +35,21 @@
           </view>
         </view>
         <view class='down'>
-          <view class='left'>
-            <text>{{item.d_count}}</text>
+          <view class="number">
+            <text>{{item.d_id}}号</text>
           </view>
-          <image class="icon" src="https://www.gomi.site/poster/点赞1.png" wx:if="{{item.iconid == 0}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
-          <image class="icon" src="https://www.gomi.site/poster/点赞2.png" wx:if="{{item.iconid == 1}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+          <view class='left'>
+            <text wx:if="{{item.iconid == 0}}" style='color:rgba(0,0,0,0.3)'>{{item.d_count}}</text>
+            <text wx:if="{{item.iconid == 1}}" style='color:#ffa500'>{{item.d_count}}</text>
+            <image class="icon" src="../../images/zan1.png" wx:if="{{item.iconid == 0}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+          <image class="icon" src="../../images/zan2.png" wx:if="{{item.iconid == 1}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+          </view>
+          
         </view>
       </view>
     </view>
-  </view>
+  </view> 
+
   <view class='bottom'>
      <text>再翻也没有啦~~</text>
   </view>

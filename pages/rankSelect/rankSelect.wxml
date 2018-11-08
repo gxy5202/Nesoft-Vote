@@ -1,0 +1,77 @@
+<!--pages/rankSelect/rankSelect.wxml-->
+<view class="container">
+  <view class="title">
+    人气排行
+    <image src="../../images/ranktop.png"></image>
+  </view>
+  <view class='swiper_wrap'>
+     <swiper class="tip_swiper" autoplay='true' circular='false' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)' skip-hidden-item-layout="true" previous-margin="30rpx" next-margin="30rpx">
+      <swiper-item class="tip_item" wx:for="{{titleList}}" data-index="{{index}}" bindtap="toRank">
+        <view class="color_item">
+          <view>{{item.rank_name}}</view>
+          <view>{{item.rank_des}}</view>
+        </view>
+        
+      </swiper-item>
+    </swiper>
+  </view>
+  <view class='info'>
+    <view>累计投票：{{info.count}}票</view>
+    <text>|</text>
+    <view>参与作品：{{info.item}}件</view>
+  </view>
+  <view class='content'>
+    <view class='all'>
+      <view class="rank_title">总人气榜</view>
+      <view class='rank'>
+        <view class="rank_item" wx:for="{{alllist}}">
+        <view class="left">
+          <image src="../../images/1.png" wx:if="{{index == 0}}"></image>
+          <image src="../../images/2.png" wx:if="{{index == 1}}"></image>
+          <image src="../../images/3.png" wx:if="{{index == 2}}"></image>
+          <view>{{item.d_name}}</view>
+        </view>
+        <view class="right">
+          <text>{{item.d_count}}</text>
+          <image src="../../images/zan2.png"></image>
+          
+        </view>
+        </view>
+      </view>
+    </view>
+    <view class='day'>
+      <view class="rank_title">今日人气榜</view>
+      <view class='rank'>
+        <view class="rank_item" wx:for="{{daylist}}">
+        <view class="left">
+          <image src="../../images/1.png" wx:if="{{index == 0}}"></image>
+          <image src="../../images/2.png" wx:if="{{index == 1}}"></image>
+          <image src="../../images/3.png" wx:if="{{index == 2}}"></image>
+          <view>{{item.d_name}}</view>
+        </view>
+        <view class='right'>
+          <text>{{item.up_count}}</text>
+          <image src="../../images/zan2.png"></image>
+        </view>
+        </view>
+      </view>
+    </view>
+     <view class='up'>
+      <view class="rank_title">专业榜</view>
+      <view class='rank'>
+        <view class="rank_item" wx:for="{{majlist}}">
+        <view class="left">
+          <image src="../../images/1.png" wx:if="{{index == 0}}"></image>
+          <image src="../../images/2.png" wx:if="{{index == 1}}"></image>
+          <image src="../../images/3.png" wx:if="{{index == 2}}"></image>
+          <view>{{item.m_name}}</view>
+        </view>
+        <view class="right">
+          <text>{{item.count}}</text>
+          <image src="../../images/zan2.png"></image>
+        </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,17 +1,15 @@
 //app.js
 App({
+  
   onLaunch: function () {
     // 展示本地存储能力
+    var that = this
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
+    
     // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
+ 
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -33,7 +31,38 @@ App({
       }
     })
   },
+  onShow:function(){
+    // var that = this
+    // wx.login({
+    //   success(res) {
+    //     if (res.code) {
+    //       //发起网络请求
+    //       wx.request({
+    //         url: 'https://www.gomi.site/login',
+    //         data: {
+    //           code: res.code,
+    //           Appid: "wx9e7455bc8709d727",
+    //           AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+    //         },
+    //         header: {
+    //           'content-type': 'application/json'
+    //         },
+    //         success: function (next) {
+    //           that.globalData.openid = next.data
+              
+    //         }
+    //       })
+    //     } else {
+    //       console.log('登录失败！' + res.errMsg)
+    //     }
+    //   }
+    // })
+    
+  },
   globalData: {
-    userInfo: null
-  }
+    userInfo: "",
+    js_code: "",
+    openid: "",
+    session_key: ""
+  },
 })

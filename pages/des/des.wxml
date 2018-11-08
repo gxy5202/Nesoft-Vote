@@ -1,12 +1,5 @@
 <view class='container'>
-   
-
-
-
-  <view class='show-video'>
-    <video  src='https://www.gomi.site/videos/{{showlist.d_videourl}}' autoplay></video>
-  </view>
-  <view class='header' style='color:rgb(255, 204, 0);'>
+   <view class='header' >
       <view class='end'>{{end}}</view>
       <view class="timer">
         <view class="time">
@@ -37,52 +30,72 @@
       </view>
  
   </view>
+
+<view class='show-video' >
+  <txv-video wx:if="{{showlist.d_vidlink}}" vid="{{showlist.d_vidlink}}"  playerid="txv01" controls="true" autoplay="true" width="100%" height="400rpx" >
+  </txv-video>
+</view>
   <view class='des'>
 
-    <view class='content'>
-      <view class='left'>
-        <view>
-          <text>姓名</text>
-        </view>
-        <view>
-          <text>项目名称</text>
-        </view>
-        <view>
-          <text>年级</text>
-        </view>
-        <view>
-          <text>专业</text>
-        </view>
+    <view class="vote">
+      <view class="count">
+      <!-- <view>
+        <image src="../../images/up.png"></image>
+        <image src="../../images/up.png"></image>
+        <image src="../../images/up.png"></image>
+      </view> -->
+      <image src="../../images/vote2.png"></image>
+        票数:
+        {{showlist.d_count}}
       </view>
-      <view class='mid'>
-        <view>
-          <text>{{showlist.d_st_name}}</text>
-        </view>
-        <view>
-          <text>{{showlist.d_name}}</text>
-        </view>
-        <view>
-          <text>{{showlist.g_name}}</text>
-        </view>
-        <view>
-          <text>{{showlist.m_name}}</text>
-        </view>
-      </view>
-      <view class='right'>
-        <image class="icon" src="https:///www.gomi.site/poster/点赞1.png" wx:if="{{showlist.iconid == 0}}" catchtap='addpiao' data-id="{{showlist.d_id}}"></image>
-          <image class="icon" src="https:///www.gomi.site/poster/点赞2.png" wx:if="{{showlist.iconid == 1}}" catchtap='addpiao' data-id="{{showlist.d_id}}"></image>
-        <view><text>得票数：{{showlist.d_count}}</text></view>
+      <view class='box1' wx:if="{{showlist.iconid == 1}}" catchtap='addpiao' data-id="{{showlist.d_id}}">
+      <image src='../../images/zan2.png'></image>
+      已投票</view>
+      <view class='box2' wx:if="{{showlist.iconid == 0}}" catchtap='addpiao' data-id="{{showlist.d_id}}">
+      <image src='../../images/zan3.png'></image>
+      投 票
+      
       </view>
     </view>
-    
+    <view class="pro_info">
+      <view class="info_item">
+        <text class="pro_name">编    号:</text>
+        <text>{{showlist.d_id}}</text>
+      </view>
+      <view class="info_item">
+        <text class="pro_name">项    目:</text>
+        <text>{{showlist.d_name}}</text>
+      </view>
+      <view class="info_item">
+        <text class="pro_name">姓    名:</text>
+        <text>{{showlist.d_st_name}}</text>
+      </view>
+      <view class="info_item">
+        <text class="pro_name">专    业:</text>
+        <text>{{showlist.m_name}}</text>
+      </view>
+      <view class="info_item">
+        <text class="pro_name">年    级:</text>
+        <text>{{showlist.g_name}}</text>
+      </view>
+    </view>
+   
     <view class='show-des'>
       <view class="intro">
         <view>作品简介</view>
       </view>
       <view>
-        <text class="line">{{showlist.d_des}}</text>
+        <view class="line">{{showlist.d_des}}</view>
       </view>
     </view>
+    <button class="share" bindtap='share' open-type="share">
+      <image src="../../images/share.png"></image>
+      分享给朋友
+    </button>
+    <view class="bottom_tip">
+      
+      感谢参与，本活动最终解释权归成都东软学院所有
+    </view>
   </view>
-
+  
 </view>

@@ -1,6 +1,6 @@
 <!--pages/rank/rank.wxml-->
-<view class='container'>
-   <view class='header' style='color:rgb(255, 204, 0);'>
+<view class='container' >
+   <view class='header' id="head" >
       <view class='end'>{{end}}</view>
       <view class="timer">
         <view class="time">
@@ -31,18 +31,29 @@
       </view>
  
   </view>
-  <view class="wrap">
-    <view class="title" style="background:url('/images/rank2.png') no-repeat;cover">
-        人气榜
+  <view class="wrap" id="wrapper" >
+    <view class="title" style="background:url('{{rankimg.img_src}}') no-repeat;cover">
+        <text wx:if="{{titleList.rank_name == '总人气榜'}}">{{titleList.rank_name}}</text>
+        <text wx:if="{{titleList.rank_name == '今日人气榜'}}">{{titleList.rank_name}}</text>
+         <view>
+          <image src="../../images/up.png"></image>
+          <image src="../../images/up.png"></image>
+          <image src="../../images/up.png"></image>
+        </view>
     </view>
-  <view class='rank' wx:for="{{rankList}}">
+  <view class='rank' wx:for="{{rankList}}" data-index='{{index}}' data-id='{{item.d_id}}'>
     <view class='rank-list'>
       <view class='left'>
+        <image wx:if="{{item.NO==1}}" class='top' src='../../images/top1.png'></image>
+        <image wx:if="{{item.NO==2}}" class='top' src='../../images/top2.png'></image>
+        <image wx:if="{{item.NO==3}}" class='top' src='../../images/top3.png'></image>
+        <view class="top" wx:if="{{item.NO>3}}"></view>
         <view class='NO'>
           <text>NO.{{item.NO}}</text>
         </view>
         <view class='pic'>
-          <image src='https://www.gomi.site/poster/{{item.d_imgurl}}' mode='aspectFill'></image>
+          <image class="imgLoad" src='../../images/loading.png'  lazy-load='true' ></image>
+          <image class="img" src='{{item.d_imglink}}' mode='aspectFill'></image>
         </view>
         <view class='content'>
           <view class='name'>
@@ -50,7 +61,8 @@
           </view>
           <view class='id'>{{item.d_id}}号</view>
            <view class='count'>
-            <text decode="{{true}}">票数:&nbsp;&nbsp;&nbsp;{{item.d_count}}</text>
+            <text wx:if="{{item.up_count >=0 }}" decode="{{true}}">新增票数:&nbsp;&nbsp;{{item.up_count}}</text>
+            <text wx:else decode="{{true}}">票数:&nbsp;&nbsp;{{item.d_count}}</text>
           </view>
         </view>
       </view>
@@ -60,5 +72,7 @@
     </view>
   </view>
   </view>
-  
+  <view class='scrollTop' bindtap='topScroll' style='opacity:{{opacity}};transform:{{translate}}'>
+    <image src='../../images/top.png'></image>
+  </view>
 </view>

@@ -1,66 +1,49 @@
-<view class='container'>
+<view class='container' >
   <view class="mask" style="display:{{display}}">
     <view class="tips">
-      <h1>投票说明</h1>
-      <view>1.该投票活动为成都东软学院学生作品展示投票，可观看作品简介、视频等内容</view>
-      <view>2.每人每天只可给同一作品投一票，可同时给多个作品投票，每天凌晨00：00：00后即可再次投票</view>
-      <view>3.本着公平公正公开的原则，请任何参与投票的作品不要进行刷票行为，一经发现，票数清零</view>
+      <swiper class="tip_swiper" autoplay='false' indicator-dots='ture' circular='false' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)' skip-hidden-item-layout="true">
+      <swiper-item class="tip_item" wx:for="{{tipslist}}">
+        <image id="tip_img" src="{{item.img_src}}"></image>
+      </swiper-item>
+    </swiper>
     </view>
+    <!-- <view class="tips" style="background:white url('/images/bk1.png') no-repeat center">
+      <h1>投票说明</h1>
+      <view>1.该投票活动为成都东软学院学生作品展示投票，可观看作品简介、视频等内容。</view>
+      <view>2.每人每天只可给同一作品投一票，可同时给多个作品投票，每天凌晨00:00:00后即可再次投票。</view>
+      <view>3.本着公平公正公开的原则，请任何参与投票的作品不要进行刷票行为，一经发现，票数清零。</view>
+    </view> -->
     <view class="none">
-      <image src="/images/取消.png" bindtap='display' ></image>
+      <image src="../../images/cancel.png" bindtap='display' ></image>
     </view>
   </view>
-  <view id="topSwiper">
-    <swiper autoplay='false' indicator-dots='ture' circular='ture' indicator-color='#E6E6FA' indicator-active-color='green'>
+  <view id="topSwiper" >
+    <swiper autoplay='false' indicator-dots='ture' circular='ture' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)'>
       <swiper-item wx:for="{{bannerlist}}">
-        <image src="{{item.imgSrc}}" class='banner-pic'></image>
+        <image src="{{item.img_src}}" class='banner-pic'></image>
       </swiper-item>
     </swiper>
     <view id="topTitle">
-      <text>学生作品展示</text>
+      <text>信管系学生作品展示</text>
       <text style='font-size:12pt;'>构思、设计、实现、运作</text>
     </view>
   </view>
   <view class='search' bindtap='search'>
-    <view class='search-input'>
-      <icon class='iconfont icon-search'></icon>
+      <image src='../../images/search2.png'></image>
       <view>查找作品</view>
-    </view>
   </view>
 
-  <!-- <view class='choose'>
-    <view class='chooseItem' bindtap='tap1Func'>年级：{{finalSelect.grade}}
-      <image src="/images/箭头.png"></image>
-    </view>
-    <view class='chooseItem' bindtap='tap2Func'>专业：{{finalSelect.major}}
-      <image src="/images/箭头.png"></image>
-    </view>
-    <view class='chooseItem-list' wx:if="{{selected == 1}}">
-      <view wx:for="{{gradelist}}">
-        <view bindtap='gradeclicks' data-index="{{index}}">
-          {{item.name}}
-        </view>
-      </view>
-    </view>
 
-    <view class='chooseItem-list' wx:if="{{selected == 2}}">
-      <view wx:for="{{majorlist}}">
-        <view bindtap='majorclicks' data-index="{{index}}">
-          {{item.name}}
-        </view>
-      </view>
-    </view>
-  </view> -->
-  <view class="pick"> 
+  <view class="pick" id="picker" style='position:{{fixed}};top:{{top}}'  > 
       <picker mode="multiSelector" range="{{range}}" value="选择" bindchange="bindchange">
         <view class="picker-item">
-          年级：{{range[0][index[0]]}}
-          <image src="/images/箭头.png"></image>
+          年级:{{range[0][index[0]]}}
+          <image src="../../images/jian.png"></image>
         </view>
           |  
         <view class="picker-item">
-          专业：{{range[1][index[1]]}}
-          <image src="/images/箭头.png"></image>  
+          专业:{{range[1][index[1]]}}
+          <image src="../../images/jian.png"></image>  
         </view>
       </picker>
   </view>
@@ -71,7 +54,8 @@
   <view class='show'>
     <view class='show-item' wx:for="{{showlist}}" bindtap='todes' data-index='{{index}}' data-id='{{item.d_id}}' >
       <view class='show-pic'>
-        <image src='https://www.gomi.site/poster/{{item.d_imgurl}}' mode='aspectFill'></image>
+        <image class="imgLoad" src='../../images/loading.png'  lazy-load='true' ></image>
+        <image class="img" src='{{item.d_imglink}}' mode='aspectFill' lazy-load='true' bindload='{{imgLoad}}'></image>
       </view>
       <view class='show-content'>
         <view class='up'>
@@ -86,12 +70,17 @@
           </view>
         </view>
         <view class='down'>
+          <view class="number">
+            <text>{{item.d_id}}号</text>
+          </view>
           <view class='left'>
-            <text>{{item.d_count}}</text>
+            <text wx:if="{{item.iconid == 0}}" style='color:rgba(0,0,0,0.3)'>{{item.d_count}}</text>
+            <text wx:if="{{item.iconid == 1}}" style='color:#ffa500'>{{item.d_count}}</text>
+            <image class="icon" src="../../images/zan1.png" wx:if="{{item.iconid == 0}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+          <image class="icon" src="../../images/zan2.png" wx:if="{{item.iconid == 1}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
           </view>
           <!-- <icon class='iconfont icon-favorite' color='red' catchtap='addpiao' data-id="{{item.d_id}}"></icon> -->
-          <image class="icon" src="https://www.gomi.site/poster/点赞1.png" wx:if="{{item.iconid == 0}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
-          <image class="icon" src="https://www.gomi.site/poster/点赞2.png" wx:if="{{item.iconid == 1}}" catchtap='addpiao' data-id="{{item.d_id}}"></image>
+          
         </view>
       </view>
     </view>
@@ -100,7 +89,16 @@
   <view class='bottom'>
     <text>再翻也没有啦~~</text>
   </view>
-  <view class='scrollTop' bindtap='topScroll'>
-    <image src='/images/向上.png'></image>
+  <view class="circleBar">
+    <view class='scrollTop' bindtap='topScroll' style='opacity:{{opacity}};transform:{{translate}}'>
+      <image src='../../images/top.png'></image>
+    </view>
+    <view class='searchBar' bindtap='search' style='opacity:{{opacity}};transform:{{translate}}'>
+      <image src='../../images/search.png'></image>
+    </view>
+    <view class='refreshBar' bindtap='onPullDownRefresh' style='opacity:{{opacity}};transform:{{translate}}'>
+      <image src='../../images/refresh.png'></image>
+    </view>
   </view>
+  
 </view>

@@ -1,6 +1,7 @@
 // pages/des/des.js
+const txvContext = requirePlugin("tencentvideo");
 Page({
-
+  
   /**
    * 页面的初始数据
    */
@@ -8,28 +9,59 @@ Page({
     showlist: [],
     time:"",
     timer:"",
-    end:"距离投票结束"
+    end:"投票结束:"
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function(query) {
+    const scene = decodeURIComponent(query.scene)
+    console.log(query)
     var that = this;
-    var id = options.index;
-    console.log(id)
-    wx.showLoading({
-      title: '正在加载视频',
-    })
+    var id = query.id;
+    
+    if(scene){
+      wx.login({
+        success: res => {
+          console.log(res.code)
+          wx.request({
+            url: 'https://www.gomi.site/data',
+            data: {
+              code: res.code,
+              Appid: "wx9e7455bc8709d727",
+              AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+            },
+            header: {
+              'content-type': 'application/json'
+            },
+            success: function (next) {
+              console.log(next.data)
+              for(let x in next.data){
+                if (scene == next.data[x].d_id){
+                  that.setData({
+                    showlist: next.data[x],
+                  })
+                }
+              }
+              
+              
+              wx.hideLoading(
+  
+              )
+              
+            }
+          })
+        }
+      });          
+    };
+    
     wx.getStorage({
       key: 'key',
       success: function(res) {
         that.setData({
           showlist: res.data
         })
-        wx.hideLoading(
-
-        )  
       },
     })
     wx.getStorage({
@@ -58,8 +90,8 @@ Page({
             )) * 100
           );
           var newTime = fill_zero_prefix(parseInt(day)) + "天" + fill_zero_prefix(parseInt(hours)) + "小时" + fill_zero_prefix(parseInt(((hours) - (parseInt(hours))) * 60)) + "分钟" + fill_zero_prefix(parseInt(minutes * 60)) + "秒" + seconds;
-          console.log(miniseconds)
-          if (miniseconds <= 0 ){
+          
+          if (restTime <= 0 ){
             that.setData({
               time: {
                 day1: "0",
@@ -73,7 +105,7 @@ Page({
                 miseconds1: "0",
                 miseconds2: "0"
               },
-              end:"投票已结束"
+              end:"已结束"
             })
           }else {
             that.setData({
@@ -89,7 +121,7 @@ Page({
                 miseconds1: seconds.toString().substring(0, 1),
                 miseconds2: seconds.toString().substring(1, 2)
               },
-              end: "距离投票结束"
+              end: "投票结束:"
             })
           }
         
@@ -152,15 +184,27 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
-
+  onShareAppMessage: function(query) {
+    var that = this;
+    var id = that.data.showlist.d_id;
+    return {
+      title:"我在参与51校园展",
+      path:"/pages/des/des?id="+id,
+      imageUrl:"../../images/51.png",
+      success:function(res){
+        console.log("转发成功",res);
+      },
+      fail:function(res){
+        console.log("转发失败", res);
+      }
+    }
   },
   addpiao: function (e) {
     var that = this
     var id = e.currentTarget.dataset.id
     var showlist = that.data.showlist
     console.log(id)
-    if(that.data.end == "投票已结束"){
+    if(that.data.end == "已结束"){
       wx.showToast({
         title: "该活动投票已结束",
         icon: "none",
@@ -173,8 +217,8 @@ Page({
             url: 'https://www.gomi.site/user',
             data: {
               code: res.code,
-              Appid: "wxd680d257e52cab2b",
-              AppSecret: "19e9721f2131505d1f4d83966a155ed4",
+              Appid: "wx9e7455bc8709d727",
+              AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
               id: id
             },
             header: {
@@ -187,7 +231,10 @@ Page({
                   [`showlist.iconid`]: next.data.iconid
                 })
               }
-
+              wx.setStorage({
+                key: 'key',
+                data: showlist,
+              })
               console.log(next.data)
               wx.showToast({
                 title: next.data.tip,
@@ -200,6 +247,13 @@ Page({
       });
     }
     
+    
+  },
+  share:function(){
+    wx.showShareMenu({
+      
+    })
+    this.onShareAppMessage();
   }
   
 })

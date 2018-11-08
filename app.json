@@ -3,35 +3,42 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/des/des",
-    "pages/sort/sort",
     "pages/search/search",
-    "pages/test/test",
-    "pages/rank/rank"
+    "pages/rank/rank",
+    "pages/rankSelect/rankSelect"
   ],
   "window": {
-    "backgroundTextStyle": "light",
+    
+    "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#006ACC",
-    "navigationBarTitleText": "东软学院学生作品展示",
-    "navigationBarTextStyle": "#00EE00"
+    "navigationBarTitleText": "校园展",
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
-      "color": "#000000",
-      "selectedColor": "#FFA500",
-      "opacity": 0.5,
-      "backgroundColor": "#EAEAEA",
-      "list": [
-        {
-          "pagePath": "pages/index/index",
-          "text": "首页",
-          "iconPath": "images/index1.png",
-          "selectedIconPath": "images/index.png"
-        },
-        {
-          "pagePath": "pages/rank/rank",
-          "text": "人气榜单",
-          "iconPath": "images/notice1.png",
-          "selectedIconPath": "images/notice.png"
-        }
-      ]
+    "color": "#000000",
+    "selectedColor": "#006ACC",
+    "opacity": 0.5,
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home1.png"
+      },
+      {
+        "pagePath": "pages/rankSelect/rankSelect",
+        "text": "人气榜",
+        "iconPath": "images/rank.png",
+        "selectedIconPath": "images/rank1.png"
+      }
+    ]
+  },
+  "plugins": {
+    "tencentvideo": {
+      "version": "1.2.2",
+      "provider": "wxa75efa648b60994b"
     }
+  }
+  
 }
