@@ -1,0 +1,86 @@
+<!--pages/publish/publish.wxml-->
+<!-- 发布活动 -->
+<view class='container'>
+  <view class="">
+    <!-- 添加封面图片 -->
+    <view class="upload-img" bindtap='upload'>
+      <van-icon wx:if="{{imgUrl === ''}}" name="plus" size="80px" color="rgba(0,0,0,0.2)" />
+      <text wx:if="{{imgUrl === ''}}">添加封面图片</text>
+      <image class="preview" wx:if="{{imgUrl !== ''}}" src="{{imgUrl}}" mode="aspectFill"></image>
+    </view>
+    
+    <van-cell-group>
+      <!-- 活动名称 -->
+      <view class="ac-name">
+        <text>活动名称：</text>
+        <input placeholder="请输入活动名称" auto-focus bindinput='acName'/>
+      </view>
+
+      <!-- 参与范围 -->
+      <view class="ac-range">
+        <text>参与范围：</text>
+        <picker mode="multiSelector" range="{{range}}" range-key="{{range[index]}}" value="{{index}}" bindchange="bindchange" bindcolumnchange="bindMultiPickerColumnChange" >
+          <view class="range-text">
+            {{rangeText}}
+          </view>
+        </picker>
+      </view>
+      
+      <!-- 开始日期 -->
+      <view class='ac-startDate'>
+        <text>开始日期：</text>
+        <view class="date" data-id='0' bindtap='popShow'>{{startTime.text}}</view>
+      </view>
+
+      <!-- 截止日期 -->
+      <view class='ac-endDate'>
+        <text>截止日期：</text>
+        <view class="date" data-id='1' bindtap='popShow'>
+          {{endTime.text}}
+        </view>
+      </view>
+
+      <!-- 日期选择器 -->
+      
+      <van-popup show="{{ popShow }}" z-index="999" bind:close="onClose" position="bottom">
+
+        <van-datetime-picker
+          type="datetime"
+          value="{{ currentDate }}"
+          min-date="{{ minDate }}"
+          max-date="{{ maxDate }}"
+          bind:input="changeDate"
+          bind:confirm="confirmDate"
+          bind:cancel="cancelDate"
+          show-toolbar
+        />
+      </van-popup>
+      
+      <!-- 评分标准 -->
+      <view class="ac-rate" bindtap="toRate">
+        <text>自定义评分标准</text>
+        <text>{{rateStatus}}</text>
+      </view>
+
+      <!-- 活动描述 -->
+      <view class="ac-describe">
+        <textarea
+          style="display:{{showMask}}"
+          placeholder="这里描述活动详情及规则等"
+          placeholder-style="color:rgba(0,0,0,0.2);"
+          bindinput='acDes'
+        />
+        
+      </view>
+
+      <button
+        class="btn"
+        type="default"
+        bindtap="publish"
+        hover-class="other-button-hover"
+      >
+        发布
+      </button>
+    </van-cell-group>
+  </view>
+</view>

@@ -1,20 +1,23 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+//import lazyLoad from '../../utils/lazyload';
+var lazyload = require("../../utils/lazyload.js");
 Page({
   data: {
     openid: app.globalData.openid,
+    aid:'',
     fixed: "relative",    //是否固定导航栏
+    rel:"absolute",
     top:"0",
     opacity:"0",
     translate:"translateY(50px)",
-    hiddenHeight: 0,
-    selected: 0,
+    bottomText:"下拉加载更多",
     display:"block",
     bannerlist: [],
     tipslist:[],    
     showlist: [],
+    loadlist:[],
     range: [['全部', '2015级', "2016级", "2017级"], ["全部", "信息系统", "电子商务", "物流管理"]],
     index:[0,0],
     gradelist: [
@@ -52,9 +55,16 @@ Page({
 
   },
   onLoad:function(options){
-    var that = this
+    var that = this;
+    that.setData({
+      aid:options.aid
+    });
+    wx.hideTabBar({
+      aniamtion:'false'
+    });
+    //请求banner等图片
     wx.request({
-      url: 'https://www.gomi.site/img',
+      url: 'https://www.nsuim.cn/img',
       header: {
         'content-type': 'application/json'
       },
@@ -71,7 +81,7 @@ Page({
       fail: function () {
         wx.showModal({
           title: '提示',
-          content: '读取数据失败，请检查网络或联系小程序管理人员',
+          content: '网络异常，读取数据失败',
           confirmColor: "#006ACC",
           success(res) {
             if (res.confirm) {
@@ -85,12 +95,116 @@ Page({
       
     })
   },
-  onShow:function(){
-    var that = this
+  //下拉加载，按需加载
+  onReachBottom: function () {
+    var that = this;
+    let aid = that.data.aid;
+    var showlist = that.data.showlist;//这里的showlist为实际展现在页面的数组
+    var loadlist = that.data.loadlist;//loadlist为请求到的所有数据
     var key = wx.getStorageSync("key"); 
     var index = that.data.index
     var grade = that.data.range[0][index[0]]
     var major = that.data.range[1][index[1]]
+    var finalSelect = {
+      grade: grade,
+      major: major
+    }
+    var arr = [];
+    wx.showLoading({
+      title: '加载中',
+    })
+    var lazyDetails = function(next){
+      //判断是否筛选过年级或专业
+      class select{
+        
+      }
+      //如果筛选了其中任意一项
+      if (finalSelect.grade != "全部" || finalSelect.major != "全部") {
+        //首页懒加载，每次只加载10条数据
+        if (showlist.length + 10 > loadlist.length) {
+          //遍历整个数组
+          for (var i in showlist) {
+            //如果数据与已经点击过详情页再返回的数据匹配，那么就更新该条数据的票数和投票图标
+            if (showlist[i].d_id === key.d_id) {
+              that.setData({
+                [`loadlist[${i}].d_count`]: key.d_count,
+                [`loadlist[${i}].iconid`]: key.iconid,
+              })
+            }
+          }
+          that.setData({
+            showlist: loadlist.slice(0, loadlist.length)
+          })
+          //如果
+          if (showlist.length === loadlist.length) {
+            that.setData({
+              bottomText: "已显示全部"
+            })
+            wx.showToast({
+              title: '已经到最后啦',
+              icon: 'none',
+            })
+          } else {
+            wx.hideLoading()
+          }
+        }
+        else {
+          for (var i in showlist) {
+            if (showlist[i].d_id == key.d_id) {
+              that.setData({
+                [`loadlist[${i}].d_count`]: key.d_count,
+                [`loadlist[${i}].iconid`]: key.iconid,
+              })
+
+            }
+          }
+          that.setData({
+            showlist: loadlist.slice(0, loadlist.length + 10)
+          })
+          wx.hideLoading()
+        }
+
+      } else {
+
+        if (showlist.length + 10 > next.data.length) {
+          that.setData({
+            showlist: next.data.slice(0, next.data.length),
+          })
+
+          if (showlist.length == next.data.length) {
+            that.setData({
+              bottomText: "已显示全部"
+            })
+            wx.showToast({
+              title: '已经到最后啦',
+              icon: 'none',
+            })
+          } else {
+
+            wx.hideLoading()
+          }
+
+        }
+        else {
+          that.setData({
+            showlist: next.data.slice(0, showlist.length + 10),
+          })
+          wx.hideLoading()
+        }
+      }
+    }
+    
+    lazyload.lazyLoad('https://www.nsuim.cn/data', "wx9e7455bc8709d727", "66dbfa9fcf37f5b381bcac0532400da8", aid,lazyDetails);
+
+  },
+  onShow:function(){
+    var that = this
+    var showlist = that.data.showlist;
+    var key = wx.getStorageSync("key"); 
+    var index = that.data.index
+    var grade = that.data.range[0][index[0]]
+    var major = that.data.range[1][index[1]];
+    let aid = that.data.aid;
     var finalSelect = {
       grade: grade,
       major: major
@@ -101,11 +215,12 @@ Page({
         success: res => {
           console.log(res.code)
           wx.request({
-            url: 'https://www.gomi.site/data',
+            url: 'https://www.nsuim.cn/data',
             data: {
               code: res.code,
               Appid: "wx9e7455bc8709d727",
               AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+              aid:aid
             },
             header: {
               'content-type': 'application/json'
@@ -123,72 +238,73 @@ Page({
                   }
                 }
               } else {
-                that.setData({
-                  showlist: next.data,
-
-                  [`index[${0}]`]: 0,
-
-                  [`index[${1}]`]: 0,
-                })
-
+                if (showlist.length < 1) {
+                  that.setData({
+                    //showlist: next.data,
+                    showlist: next.data.slice(0, 10),
+                    [`index[${0}]`]: 0,
+                    [`index[${1}]`]: 0,
+                  })
+                }else{
+                  that.setData({
+                    //showlist: next.data,
+                    showlist: next.data.slice(0, showlist.length),
+                    [`index[${0}]`]: 0,
+                    [`index[${1}]`]: 0,
+                  })
+                }
               }
-             
-              // if (finalSelect.grade != "全部" || finalSelect.major != "全部"){
-              //   for(let x in next.data){
-              //     if (finalSelect.grade == next.data[x].g_name && finalSelect.major == next.data[x].m_name) {
-              //       arr.push(next.data[x])
-              //       for(let i in arr){
-              //         if (arr[i].d_id == showlist[i].d_id && arr[i].d_count != showlist[i].d_count) {
-              //           that.setData({
-              //             [`showlist[${i}]`]: arr[i]
-              //           })
-              //         }
-              //       }
-                    
-                    
-              //     } else if (finalSelect.grade == next.data[x].g_name && finalSelect.major == "全部"){
-              //       arr.push(next.data[x])
-              //       for (let i in arr) {
-              //         if (arr[i].d_id == showlist[i].d_id && arr[i].d_count != showlist[i].d_count) {
-              //           that.setData({
-              //             [`showlist[${i}]`]: arr[i]
-              //           })
-              //         }
-              //       }
-                    
-              //     } else if (finalSelect.major == next.data[x].m_name && finalSelect.grade == "全部") {
-              //       arr.push(next.data[x])
-              //       for (let i in arr) {
-              //         if (arr[i].d_id == showlist[i].d_id && arr[i].d_count != showlist[i].d_count) {
-              //           that.setData({
-              //             [`showlist[${i}]`]: arr[i]
-              //           })
-              //         }
-              //       }
-                  
-              //     }
-              //   }
-              // }
+            },
+            fail: function () {
               
+              wx.showModal({
+                title: '提示',
+                content: '网络异常，读取数据失败',
+                confirmColor: "#006ACC",
+                success(res) {
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+                }
+              })
             }
           })
         },
-     
+        fail: function () {
+          
+          wx.showModal({
+            title: '提示',
+            content: '网络异常，读取数据失败',
+            confirmColor: "#006ACC",
+            success(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+        }
       });                   
                                                                                
   },
   onHide:function(){
  
   },
+  //下拉刷新
   onPullDownRefresh:function(){
     wx.showNavigationBarLoading();
     wx.showLoading({
-      title: '刷新中...',
+      title: '刷新中',
     })
-    var that = this
-    var index = that.data.index
-    var grade = that.data.range[0][index[0]]
-    var major = that.data.range[1][index[1]]
+    var that = this;
+    let aid = that.data.aid;
+    var showlist = that.data.showlist;
+    var index = that.data.index;
+    var grade = that.data.range[0][index[0]];
+    var major = that.data.range[1][index[1]];
     var finalSelect = {
       grade: grade,
       major: major
@@ -198,11 +314,12 @@ Page({
       success: res => {
         console.log(res.code)
         wx.request({
-          url: 'https://www.gomi.site/data',
+          url: 'https://www.nsuim.cn/data',
           data: {
             code: res.code,
             Appid: "wx9e7455bc8709d727",
             AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+            aid:aid
           },
           header: {
             'content-type': 'application/json'
@@ -213,55 +330,150 @@ Page({
             var noarr = []
             for (var x in res.data) {
               if (finalSelect.grade == res.data[x].g_name && finalSelect.major == res.data[x].m_name) {
-                console.log(res.data[x])
                 arr.push(res.data[x])
-                that.setData({
-                  'showlist': arr
-                })
-                console.log(that.data.showlist)
+                if (arr.length <= 10) {
+                  that.setData({
+                    'bottomText': '已显示全部',
+                    'loadlist': arr,
+                    'showlist': arr
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    'bottomText': '下拉加载更多',
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10)
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                }
+                
               }
               else if (finalSelect.major == res.data[x].m_name && finalSelect.grade == "全部") {
-                console.log(res.data[x])
+                
                 arr.push(res.data[x])
-                that.setData({
-                  'showlist': arr
-                })
-                console.log(that.data.showlist)
+                if (arr.length <= 10) {
+                  that.setData({
+                    'bottomText': '已显示全部',
+                    'loadlist': arr,
+                    'showlist': arr
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    'bottomText': '下拉加载更多',
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10)
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                }
+              
               }
               else if (finalSelect.major == "全部" && finalSelect.grade == res.data[x].g_name) {
-                console.log(res.data[x])
+                
                 arr.push(res.data[x])
-                that.setData({
-                  'showlist': arr
-                })
-                console.log(that.data.showlist)
+                if (arr.length <= 10) {
+                  that.setData({
+                    'bottomText': '已显示全部',
+                    'loadlist': arr,
+                    'showlist': arr
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    'bottomText': '下拉加载更多',
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10)
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                }
+               
               }
               else if (finalSelect.major == "全部" && finalSelect.grade == "全部") {
-
-                that.setData({
-                  'showlist': res.data
-                })
-                console.log(that.data.showlist)
+                if (showlist.length < 1) {
+                  that.setData({
+                    //showlist: next.data,
+                    'bottomText': '下拉加载更多',
+                    'showlist': res.data.slice(0, 10),
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    //showlist: next.data,
+                    'bottomText': '下拉加载更多',
+                    showlist: res.data.slice(0, showlist.length),
+                  })
+                  wx.stopPullDownRefresh();
+                  wx.hideNavigationBarLoading();
+                  wx.hideLoading()
+                }
+                
               }
               else if (finalSelect.grade != res.data[x].g_name || finalSelect.major != res.data[x].m_name) {
 
                 noarr.push(res.data[x])
-                if (noarr.length == res.data.length)
+                if (noarr.length == res.data.length){
                   that.setData({
                     'showlist': []
                   })
-                console.log(noarr)
+                }
+                wx.stopPullDownRefresh();
+                wx.hideNavigationBarLoading();
+                wx.hideLoading()
+                
               }
             }
 
+          },
+          fail: function () {
+            wx.hideLoading()
+            wx.showModal({
+              title: '提示',
+              content: '网络异常，读取数据失败',
+              confirmColor: "#006ACC",
+              success(res) {
+                if (res.confirm) {
+                  console.log('用户点击确定')
+                } else if (res.cancel) {
+                  console.log('用户点击取消')
+                }
+              }
+            })
+          }
+        })
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showModal({
+          title: '提示',
+          content: '网络异常，读取数据失败',
+          confirmColor: "#006ACC",
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
           }
         })
       }
     });
-    wx.stopPullDownRefresh();
-    wx.hideNavigationBarLoading();
-    wx.hideLoading()
+    
   },
+ 
   onPageScroll:function(res){
     var that = this
     wx.createSelectorQuery().select('#topSwiper').boundingClientRect(function (rect) {
@@ -273,7 +485,8 @@ Page({
           fixed: "fixed",
           top: "-20rpx",
           opacity: "1",
-          translate: "translateY(0)"
+          translate: "translateY(0)",
+          rel:"relative"
         })
 
       } else if (rect.bottom > 0) {
@@ -281,7 +494,8 @@ Page({
           fixed: "relative",
           top: "0",
           opacity: "0",
-          translate: "translateY(50px)"
+          translate: "translateY(50px)",
+          rel: "absolute"
         })
       }
 
@@ -307,56 +521,6 @@ Page({
       }
     }
   },
-  tap1Func: function (e) {
-    var that = this;
-    console.log(e);
-    var s = this.data.selected;
-    if (s != 1) {
-      this.setData({
-        selected: 1
-      })
-    } else {
-      this.setData({
-        selected: 0
-      })
-    }
-    var query = wx.createSelectorQuery();
-    query.select('.show').boundingClientRect();
-    query.exec(function (res) {
-      console.log(res);
-      var vhiddenHeight = res[0].bottom - res[0].top;
-      console.log(vhiddenHeight)
-      that.setData({
-        hiddenHeight: vhiddenHeight,
-      })
-    })
-  },
-
-  tap2Func: function (e) {
-    var that = this;
-    console.log(e);
-    var s = this.data.selected;
-    if (s != 2) {
-      this.setData({
-        selected: 2
-      })
-    } else {
-      this.setData({
-        selected: 0
-      })
-    }
-    var query = wx.createSelectorQuery();
-    query.select('.show').boundingClientRect();
-    query.exec(function (res) {
-      console.log(res);
-      var vhiddenHeight = res[0].bottom - res[0].top;
-      console.log(vhiddenHeight)
-      that.setData({
-        hiddenHeight: vhiddenHeight,
-      })
-    })
-  },
-
 
   search: function() {
     wx.navigateTo({
@@ -366,6 +530,7 @@ Page({
   todes: function(e) {
     var that = this;
     var id = e.currentTarget.dataset.id;
+    var aid = that.data.aid;
     var showlist = that.data.showlist;
     for(var x in showlist){
       if(showlist[x].d_id == id){
@@ -381,7 +546,7 @@ Page({
           data: date,
         })
         wx.navigateTo({
-          url: '/pages/des/des?id='+id
+          url: '/pages/des/des?aid='+aid
         });
         console.log(id)
       }
@@ -396,6 +561,7 @@ Page({
     this.setData({
       index: e.detail.value
     })
+    let aid = that.data.aid;
     var index = that.data.index
     var grade = that.data.range[0][index[0]]
     var major = that.data.range[1][index[1]]
@@ -403,15 +569,19 @@ Page({
       grade:grade,
       major:major
     }
+    wx.showLoading({
+      title: '加载中',
+    })
     wx.login({
       success: res => {
         console.log(res.code)
         wx.request({
-          url: 'https://www.gomi.site/data',
+          url: 'https://www.nsuim.cn/data',
           data: {
             code: res.code,
             Appid: "wx9e7455bc8709d727",
             AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+            aid:aid
           },
           header: {
             'content-type': 'application/json'
@@ -422,34 +592,69 @@ Page({
             var noarr = []
             for (var x in res.data) {
               if (finalSelect.grade == res.data[x].g_name && finalSelect.major == res.data[x].m_name) {
-                console.log(res.data[x])
                 arr.push(res.data[x])
-                that.setData({
-                  'showlist': arr
-                })
-                console.log(that.data.showlist)
+                if (arr.length <= 10) {
+                  that.setData({
+                    'bottomText':'已显示全部',
+                    'loadlist': arr,
+                    'showlist': arr
+                  })
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    'bottomText': '下拉加载更多',
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10)
+                  })
+                  wx.hideLoading()
+                }
+                
               }
               else if (finalSelect.major == res.data[x].m_name && finalSelect.grade == "全部") {
-                console.log(res.data[x])
+                
                 arr.push(res.data[x])
-                that.setData({
-                  'showlist': arr
-                })
-                console.log(that.data.showlist)
+                if (arr.length <= 10) {
+                  that.setData({
+                    'bottomText': '已显示全部',
+                    'loadlist': arr,
+                    'showlist': arr
+                  })
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    'bottomText': '下拉加载更多',
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10)
+                  })
+                  wx.hideLoading()
+                }
+                
               }
               else if (finalSelect.major == "全部" && finalSelect.grade == res.data[x].g_name) {
-                console.log(res.data[x])
+                
                 arr.push(res.data[x])
-                that.setData({
-                  'showlist': arr
-                })
-                console.log(that.data.showlist)
+                if (arr.length <= 10) {
+                  that.setData({
+                    'bottomText': '已显示全部',
+                    'loadlist': arr,
+                    'showlist': arr
+                  })
+                  wx.hideLoading()
+                } else {
+                  that.setData({
+                    'bottomText': '下拉加载更多',
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10)
+                  })
+                  wx.hideLoading()
+                }
               }
               else if (finalSelect.major == "全部" && finalSelect.grade == "全部") {
-
                 that.setData({
-                  'showlist': res.data
+                  'bottomText': '下拉加载更多',
+                  'showlist': res.data.slice(0,10)
                 })
+                wx.hideLoading()
                 console.log(that.data.showlist)
               }
               else if (finalSelect.grade != res.data[x].g_name || finalSelect.major != res.data[x].m_name) {
@@ -459,10 +664,41 @@ Page({
                   that.setData({
                     'showlist': []
                   })
+                wx.hideLoading()
                 console.log(noarr)
               }
             }
 
+          },
+          fail: function () {
+            wx.showModal({
+              title: '提示',
+              content: '网络异常，读取数据失败',
+              confirmColor: "#006ACC",
+              success(res) {
+                if (res.confirm) {
+                  wx.hideLoading()
+                  console.log('用户点击确定')
+                } else if (res.cancel) {
+                  console.log('用户点击取消')
+                }
+              }
+            })
+          }
+        })
+      },
+      fail: function () {
+        wx.showModal({
+          title: '提示',
+          content: '网络异常，读取数据失败',
+          confirmColor: "#006ACC",
+          success(res) {
+            wx.hideLoading()
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
           }
         })
       }
@@ -476,64 +712,117 @@ Page({
     var id = e.currentTarget.dataset.id
     var showlist = that.data.showlist
     console.log(id)
-    for (var x in showlist) {
-      if (showlist[x].d_id == id) {
-        var time = new Date(showlist[x].t_end_time);
-        var now = new Date();
-        var restTime = time - now;
-        console.log(restTime);
-        if (restTime < 0 ) {
-          wx.showToast({
-            title: "该活动投票已结束",
-            icon: "none",
-          })
-        }else {
-          wx.login({
-            success: res => {
-              console.log(res.code)
-              wx.request({
-                url: 'https://www.gomi.site/user',
-                data: {
-                  code: res.code,
-                  Appid: "wx9e7455bc8709d727",
-                  AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
-                  id: id
-                },
-                header: {
-                  'content-type': 'application/json'
-                },
-                success: function (next) {
-                  for (var x in showlist) {
-                    if (id == showlist[x].d_id) {
-                      that.setData({
-                        [`showlist[${x}].d_count`]: next.data.data[0].d_count,
-                        [`showlist[${x}].iconid`]: next.data.iconid,
-                      })
-                      wx.setStorage({
-                        key: 'key',
-                        data: showlist[x],
-                      })
-                    }
+    wx.getNetworkType({
+      success(res) {
+        const networkType = res.networkType
+        console.log(networkType)
+        if (networkType != 'none'){
+          for (var x in showlist) {
+            if (showlist[x].d_id == id) {
+              var time = new Date(showlist[x].t_end_time);
+              var now = new Date();
+              var restTime = time - now;
+              console.log(restTime);
+              if (restTime < 0) {
+                wx.showToast({
+                  title: "该活动投票已结束",
+                  icon: "none",
+                })
+              } else {
+                wx.login({
+                  success: res => {
+                    console.log(res.code)
+                    wx.request({
+                      url: 'https://www.nsuim.cn/user',
+                      data: {
+                        code: res.code,
+                        Appid: "wx9e7455bc8709d727",
+                        AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+                        id: id
+                      },
+                      header: {
+                        'content-type': 'application/json'
+                      },
+                      success: function (next) {
+                        for (var x in showlist) {
+                          if (id == showlist[x].d_id) {
+                            that.setData({
+                              [`showlist[${x}].d_count`]: next.data.data[0].d_count,
+                              [`showlist[${x}].iconid`]: next.data.iconid,
+                            })
+                            wx.setStorage({
+                              key: 'key',
+                              data: showlist[x],
+                            })
+                          }
+                        }
+                        console.log(next.data)
+                        wx.showToast({
+                          title: next.data.tip,
+                          icon: "none",
+                        }
+                        )
+                      },
+                      fail: function () {
+                        wx.showModal({
+                          title: '提示',
+                          content: '网络异常，投票失败',
+                          confirmColor: "#006ACC",
+                          success(res) {
+                            if (res.confirm) {
+                              console.log('用户点击确定')
+                            } else if (res.cancel) {
+                              console.log('用户点击取消')
+                            }
+                          }
+                        })
+                      }
+                    })
+                  },
+                  fail: function () {
+                    wx.showModal({
+                      title: '提示',
+                      content: '网络异常，投票失败',
+                      confirmColor: "#006ACC",
+                      success(res) {
+                        if (res.confirm) {
+                          console.log('用户点击确定')
+                        } else if (res.cancel) {
+                          console.log('用户点击取消')
+                        }
+                      }
+                    })
                   }
-                  console.log(next.data)
-                  wx.showToast({
-                    title: next.data.tip,
-                    icon: "none",
-                  }
-                  )
-                }
-              })
+                });
+              }
+
             }
-          });
+
+          }
+        }else {
+          wx.showModal({
+            title: '提示',
+            content: '网络异常，投票失败',
+            confirmColor: "#006ACC",
+            success(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
         }
-
       }
+    })
 
-    }
     
    
   },
   display:function(){
+    wx.showTabBar({
+      aniamtion:true
+    })
     this.setData({
       display:"none"
     })
@@ -566,6 +855,9 @@ Page({
     }
   },
   //获取到顶部距离
-  
+  clickAnimation:function(){
+    var that = this
+   
+  }
 
 })

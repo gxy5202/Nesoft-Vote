@@ -1,0 +1,11 @@
+<!--pages/upload/upload.wxml-->
+<view class="container">
+  <view>
+    <view>
+      <form>
+        <input type='text'></input>
+        <input></input>
+      </form>
+    </view>
+  </view>
+</view>

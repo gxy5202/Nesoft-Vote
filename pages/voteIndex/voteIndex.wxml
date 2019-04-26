@@ -1,0 +1,16 @@
+<!--pages/voteIndex/voteIndex.wxml-->
+<view class="container">
+  <view class='banner'>
+    <image></image>
+  </view>
+
+  <view class="hot-ac">
+
+  </view>
+
+  <view class='ac-list'>
+    <view wx-for="{{ac_list}}" wx:key>
+
+    </view>
+  </view>
+</view>

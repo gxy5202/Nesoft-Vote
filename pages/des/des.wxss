@@ -37,6 +37,7 @@ page {
   color: white;
   
 }
+
 /* .end::before {
   content:"";
   display: inline-block;
@@ -98,6 +99,27 @@ page {
   height: 400rpx;
   width: 100%;
   margin-bottom: 20rpx;
+  
+}
+.show-video .text {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.show-video .text text {
+  display: block;
+  width: 100%;
+  height: 40rpx;
+  text-align: center;
+  color:rgba(0,0,0,.3);
+}
+.show-video image {
+  margin-top: 30rpx;
+  width: 200rpx;
+  height: 200rpx;
 }
 video {
   height: 100%;
@@ -118,7 +140,7 @@ video {
   box-shadow: 0px 3px 6px /*#706f6f*/ rgba(0, 0, 0, 0.2);
   margin: 10rpx auto;
   background-color: rgb(255, 255, 255);
-  border-radius: 20rpx;
+  border-radius: 10rpx;
 }
 .info_item {
   display: flex;
@@ -144,7 +166,7 @@ video {
   margin-bottom: 50rpx;
   background-color: rgb(255, 255, 255);
   box-shadow: 0px 6px 10px /*#706f6f*/ rgba(0, 0, 0, 0.2);
-  border-radius: 20rpx;
+  border-radius: 10rpx;
 }
 
 .content .left {
@@ -214,7 +236,7 @@ video {
   box-shadow: 0px 3px 6px /*#706f6f*/ rgba(0, 0, 0, 0.2);
   margin: 20rpx auto;
   background-color: rgb(255, 255, 255);
-  border-radius: 20rpx;
+  border-radius: 10rpx;
 }
 .intro {
   
@@ -351,7 +373,20 @@ video {
   text-align: center;
   color:rgba(0,0,0,.5);
 }
-.share {
+.toRate {
+  width: 100%;
+  height: 100rpx;
+  background: rgb(255,165,0);
+  box-shadow: 0px 0px 10px /*#706f6f*/ rgb(255,165,0);
+  border-radius: 10rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:white;
+  margin: 20rpx auto;
+  font-size: 35rpx;
+}
+.share{
   width: 100%;
   height: 100rpx;
   background: #1874cd;
@@ -367,4 +402,25 @@ video {
 .share image {
   width: 35rpx;
   height: 35rpx;
+  margin-right: 10rpx;
+}
+.backBar{
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right:40rpx;
+  right: 0rpx;
+  bottom: 30rpx;
+  z-index: 999;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: rgb(255,255,255);
+  box-shadow: 0px 4px 8px /*#706f6f*/ rgba(0, 0, 0, 0.2);
+  transition: .5s ease-in-out;
+}
+.backBar image{
+  width: 60rpx;
+  height: 60rpx;
 }

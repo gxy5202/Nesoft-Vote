@@ -1,0 +1,9 @@
+<!--pages/home/home.wxml-->
+<view class='container'>
+  <view class='nav'>
+    <view class='nav-content' wx:for="{{home_list}}" bindtap='navTo' data-id="{{index}}">
+        <image src='{{item.imgSrc}}'></image>
+        <view>{{item.name}}</view>
+    </view>
+  </view>
+</view>

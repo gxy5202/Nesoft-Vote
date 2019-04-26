@@ -40,10 +40,7 @@ page {
   height: 600rpx;
   box-shadow: 0px 4px 8px /*#706f6f*/ rgba(255, 255, 255, 0.2);
   border-radius: 20rpx;
-  /* display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  font-size: 30rpx; */
+  
   
 }
 .tip_swiper{
@@ -70,14 +67,15 @@ page {
    margin:auto;
    left: 0;
    right:0;
-   bottom: 100rpx;
+   bottom: 0;
+   top:750rpx;
    width: 80%;
    height: 60rpx;
    text-align: center;
 }
 .mask .none image {
-  width: 60rpx;
-  height: 60rpx
+  width: 80rpx;
+  height: 80rpx
 }
 #topSwiper {
   height: 500rpx;
@@ -147,49 +145,11 @@ swiper-item {
   border-radius: 30rpx;
   opacity: 0.6;
   font-size: 30rpx;
+  color: rgba(0,0,0,.5)
 }
 .search image {
   width: 35rpx;
   height: 35rpx;
-}
-
-
-.productHeader {
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 70rpx;
-  background-color: rgb(235, 243, 245);
-  color: #bdbdbd;
-  font-size: 33rpx;
-  margin: -30rpx 0 -18rpx 0;
-}
-
-.productHeader .left {
-  height: 100%;
-  width: 30%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-left: 5rpx;
-}
-
-.productHeader .red {
-  height: 70%;
-  width: 3%;
-  background-color: red;
-  margin-left: 5rpx;
-}
-
-.productHeader .right {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  width: 15%;
-  margin-right: 5rpx;
 }
 
 .show {
@@ -212,6 +172,13 @@ swiper-item {
   border-radius: 20rpx;
   box-shadow: 0px 6px 10px /*#706f6f*/ rgba(0, 0, 0, 0.2);
   
+  
+}
+.show-item:nth-child(n){
+  animation: show .5s ease-in-out;
+}
+.show-item:nth-child(2n){
+  animation: show2 .5s ease-in-out;
 }
 @keyframes show {
   0%{
@@ -221,8 +188,13 @@ swiper-item {
     transform: translateX(0rpx);
   }
 }
-.show-item:hover {
-  animation: clickShow .5s ease-in-out;
+@keyframes show2 {
+  0%{
+    transform: translateX(500rpx);
+  }
+  100%{
+    transform: translateX(0rpx);
+  }
 }
 
 .show-item .show-pic {
@@ -252,6 +224,12 @@ swiper-item {
   margin:auto;
   z-index: 1;
   animation: loading 3s linear infinite;
+}
+.no_img {
+  height: 100rpx;
+  width: 100rpx;
+  margin:auto;
+  z-index: 1;
 }
 @keyframes loading {
   0%{
@@ -295,6 +273,26 @@ swiper-item {
   -webkit-box-orient: vertical;    
   word-break: break-all; /* 追加这一行代码 */
 
+}
+.show-content .up-showname {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rate {
+  display: flex;
+  align-items: center;
+  color:#ffa500;
+  font-size: 30rpx;
+}
+.rate van-icon {
+  margin-top:3rpx;
+}
+#rate-text {
+  color:#ffa500;
+  font-size: 30rpx;
+  margin-left: 3rpx;
 }
 .show-content .up-showdes {
   text-overflow:ellipsis;
@@ -355,7 +353,7 @@ swiper-item {
   margin-bottom:-5rpx;
 }
 .icon:hover {
-  animation: move .5s;
+  animation: clickShow2 .5s ease-in-out;
 }
 .iconfont:hover{
   animation: move .5s;
@@ -388,8 +386,8 @@ swiper-item {
 }
 
 .bottom text {
-  font-size: 25rpx;
-  color: #bdbdbd;
+  font-size: 35rpx;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 
@@ -401,7 +399,7 @@ swiper-item {
   margin:30rpx auto 20rpx auto;
   justify-content: space-around;
   align-items: center;
-  position: relative;
+  position: absolute;
   left: 0;
   right: 0;
   border-radius: 30rpx;
@@ -415,6 +413,15 @@ swiper-item {
   font-family: "微软雅黑";
   box-shadow: 0px 4px 8px /*#706f6f*/ rgba(0, 0, 0, 0.2);
   transition: .5s ease-in-out;
+}
+.selectFixed {
+  
+  width: 90%;
+  height: 60rpx;
+  margin:30rpx auto 20rpx auto;
+  left: 0;
+  right: 0;
+  z-index: 0;
 }
 .picker-item {
   
@@ -446,6 +453,23 @@ swiper-item {
     transform: scale(1);
   }
 }
+@keyframes clickShow2 {
+  0%{
+    transform: scale(1);
+  }
+  30%{
+    transform: scale(1.2);
+  }
+  70%{
+    transform: scale(0.9);
+  }
+  90% {
+    transform: scale(1.03);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
 
 .scrollTop ,.searchBar,.refreshBar{
   position: fixed;
@@ -453,7 +477,7 @@ swiper-item {
   justify-content: center;
   align-items: center;
   margin-right:40rpx;
-  right: 10rpx;
+  right: 8rpx;
   bottom: 30rpx;
   z-index: 999;
   width: 100rpx;
@@ -470,12 +494,12 @@ swiper-item {
   right: 250rpx;
 }
 .scrollTop image{
-  width: 60rpx;
-  height: 60rpx;
+  width: 45rpx;
+  height: 45rpx;
 }
 .searchBar image,.refreshBar image{
-  width: 75rpx;
-  height: 75rpx;
+  width: 65rpx;
+  height: 65rpx;
 }
 .refreshBar image:hover{
   animation: fresh .6s linear;

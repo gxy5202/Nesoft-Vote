@@ -1,0 +1,87 @@
+/* pages/rate/rate.wxss */
+page {
+  height: 100%;
+}
+
+.container {
+  background: rgba(0, 0, 0, 0.02);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  height: 100%;
+}
+
+.container .rate-box {
+  width: 100%;
+  height: 80%;
+}
+
+.container .rate-box .rate-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 30rpx auto;
+  width: 95%;
+  height: 120rpx;
+  border-radius: 10rpx;
+  background: white;
+  padding: 5rpx;
+  font-size: 30rpx;
+  color: black;
+  -webkit-box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.3);
+          box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.3);
+  -webkit-animation: itemShow 0.5s linear;
+          animation: itemShow 0.5s linear;
+}
+
+@-webkit-keyframes itemShow {
+  0% {
+    -webkit-transform: translateY(-20rpx);
+            transform: translateY(-20rpx);
+  }
+  100% {
+    ransform: translateY(0);
+  }
+}
+
+@keyframes itemShow {
+  0% {
+    -webkit-transform: translateY(-20rpx);
+            transform: translateY(-20rpx);
+  }
+  100% {
+    ransform: translateY(0);
+  }
+}
+
+.container .rate-box .add-box {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 500rpx;
+  text-align: center;
+  margin-top: 100rpx;
+}
+
+.container button {
+  width: 95%;
+  background: #006acc;
+  color: white;
+}
+/*# sourceMappingURL=rate.wxss.map */

@@ -1,0 +1,22 @@
+{
+  "name": "51vote",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gxy5202/Nesoft-Vote.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gxy5202/Nesoft-Vote/issues"
+  },
+  "homepage": "https://github.com/gxy5202/Nesoft-Vote#readme",
+  "dependencies": {
+    "vant-weapp": "^0.5.8"
+  }
+}

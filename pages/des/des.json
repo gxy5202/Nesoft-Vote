@@ -1,7 +1,7 @@
 {
       "backgroundTextStyle": "light",
       "navigationBarBackgroundColor": "#006ACC",
-      "navigationBarTitleText": "小学期作品展示",
+      "navigationBarTitleText": "信管系小学期学生作品展",
       "navigationBarTextStyle": "white",
       "usingComponents": {
         "txv-video": "plugin://tencentvideo/video"

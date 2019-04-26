@@ -5,7 +5,7 @@
     <image src="../../images/ranktop.png"></image>
   </view>
   <view class='swiper_wrap'>
-     <swiper class="tip_swiper" autoplay='true' circular='false' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)' skip-hidden-item-layout="true" previous-margin="30rpx" next-margin="30rpx">
+     <swiper class="tip_swiper" autoplay='true' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)' skip-hidden-item-layout="true" previous-margin="30rpx" next-margin="30rpx">
       <swiper-item class="tip_item" wx:for="{{titleList}}" data-index="{{index}}" bindtap="toRank">
         <view class="color_item">
           <view>{{item.rank_name}}</view>
@@ -22,7 +22,10 @@
   </view>
   <view class='content'>
     <view class='all'>
-      <view class="rank_title">总人气榜</view>
+      <view class="rank_title">
+        <view>总人气榜</view> 
+        <view catchtap='toRank' data-index="0">查看全部</view> 
+      </view>
       <view class='rank'>
         <view class="rank_item" wx:for="{{alllist}}">
         <view class="left">
@@ -40,7 +43,10 @@
       </view>
     </view>
     <view class='day'>
-      <view class="rank_title">今日人气榜</view>
+      <view class="rank_title">
+        <view>今日人气榜</view>
+        <view bindtap='toRank' data-index="1">查看全部</view> 
+      </view>
       <view class='rank'>
         <view class="rank_item" wx:for="{{daylist}}">
         <view class="left">

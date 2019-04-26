@@ -15,7 +15,8 @@ Page({
     titleList:{},
     time:'',
     timer:'',
-    end: "距离投票结束"
+    end: "距离投票结束",
+    bottomText: "下拉加载更多",
   },
 
   /**
@@ -25,7 +26,7 @@ Page({
     var that = this
     
     wx.request({
-      url: 'https://www.gomi.site/img',
+      url: 'https://www.nsuim.cn/img',
       header: {
         'content-type': 'application/json'
       },
@@ -50,7 +51,7 @@ Page({
       }
     })
     wx.request({
-      url: 'https://www.gomi.site/time',
+      url: 'https://www.nsuim.cn/time',
       header: {
         'content-type': 'application/json'
       },
@@ -131,7 +132,7 @@ Page({
       fail: function () {
         wx.showModal({
           title: '提示',
-          content: '读取数据失败，请检查网络或联系小程序管理人员',
+          content: '网络异常，读取数据失败',
           confirmColor: "#006ACC",
           success(res) {
             if (res.confirm) {
@@ -182,18 +183,6 @@ Page({
    */
   onShow: function() {
     var that = this
-    // var key = wx.getStorageSync("key");
-    // var rankList = that.data.rankList
-    // console.log(rankList)
-    // console.log(key.d_name)
-    // for (var i in rankList) {
-    //   if (rankList[i].d_id == key.d_id) {
-    //     that.setData({
-    //       [`rankList[${i}].d_count`]: key.d_count,
-    //       [`rankList[${i}].iconid`]: key.iconid
-    //     })
-    //   }
-    // }
     wx.getStorage({
       key: 'rank',
       success: function(next) {
@@ -201,7 +190,7 @@ Page({
           next.data[x].NO = Number(++x);
         }
         that.setData({
-          rankList: next.data,
+          rankList: next.data.slice(0,10),
         })
       },
     })
@@ -216,7 +205,62 @@ Page({
     })    
    
   },
+  //下拉加载，按需加载
+  onReachBottom: function () {
+    var that = this
+    var rankList = that.data.rankList
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx.getStorage({
+      key: 'rank',
+      success: function (next) {
+        for (let x in next.data) {
+          next.data[x].NO = Number(++x);
+        }
+        if (rankList.length + 10 > next.data.length) {
+          that.setData({
+            rankList: next.data.slice(0, next.data.length),
+          })
 
+          if (rankList.length == next.data.length) {
+            that.setData({
+              bottomText: "已显示全部"
+            })
+            wx.showToast({
+              title: '已经到最后啦',
+              icon: 'none',
+            })
+          } else {
+
+            wx.hideLoading()
+          }
+
+        }
+        else {
+          that.setData({
+            rankList: next.data.slice(0, rankList.length + 10),
+          })
+          wx.hideLoading()
+        }
+       
+      },
+      fail: function () {
+        wx.showModal({
+          title: '提示',
+          content: '网络异常，读取数据失败',
+          confirmColor: "#006ACC",
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */
@@ -238,12 +282,6 @@ Page({
 
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
 
   /**
    * 用户点击右上角分享

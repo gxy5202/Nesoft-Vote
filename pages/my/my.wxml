@@ -1,0 +1,24 @@
+<!--pages/my/my.wxml-->
+<view class="container">
+  <view class="top">
+    <image class="bkrd" src='{{userInfo.avatarUrl}}' mode="aspectFill"></image>
+    <view class="user">
+      <!-- 头像 -->
+      
+      <image src='{{userInfo.avatarUrl}}' mode="aspectFill"></image>
+      <!-- 头像 -->
+      <view class="nickName">{{name}}</view>
+    </view>
+  </view>
+  <view class="content">
+    <van-cell-group >
+      <van-cell title="个人信息" is-link url="/pages/dashboard/index" link-type="navigateTo" />
+      <van-cell title="我的发布" is-link url="/pages/dashboard/index" link-type="navigateTo" />
+      <van-cell title="我的参与" is-link url="/pages/dashboard/index" link-type="navigateTo" />
+      
+    </van-cell-group>
+  </view>
+  
+  
+  
+</view>

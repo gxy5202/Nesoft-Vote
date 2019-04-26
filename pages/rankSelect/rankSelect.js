@@ -14,10 +14,7 @@ Page({
         rank_name: "今日人气榜",
         rank_des: "查看今日新增票数排名"
       },
-      {
-        rank_name: "专业榜",
-        rank_des: "各专业作品所获得的总票数"
-      },
+     
     ],
     alllist:[],
     daylist:[],
@@ -43,7 +40,6 @@ Page({
   onReady: function () {
 
   },
-
   /**
    * 生命周期函数--监听页面显示
    */
@@ -67,7 +63,7 @@ Page({
       success: res => {
         
         wx.request({
-          url: 'https://www.gomi.site/data',
+          url: 'https://www.nsuim.cn/data',
           data: {
             code: res.code,
             Appid: "wx9e7455bc8709d727",
@@ -78,20 +74,6 @@ Page({
           },
           success: function (res) {
             wx.hideLoading()
-            that.setData({
-              ranklistAll: res.data
-            })
-            //今日上涨票数排序
-            for (let x in res.data) {
-              res.data[x].up_count = res.data[x].d_count - res.data[x].d_old_count
-              arr1.push(res.data[x])
-              info.count += res.data[x].d_count
-              info.item = Number(x)
-            }
-            that.setData({
-              'info.count': info.count,
-              'info.item': info.item+1
-            })
             function compare(pro) {
               return function (obj1, obj2) {
                 var val1 = obj1[pro];
@@ -105,6 +87,21 @@ Page({
                 }
               }
             }
+            that.setData({
+              ranklistAll: res.data.sort(compare("d_count"))
+            })
+            //今日上涨票数排序
+            for (let x in res.data) {
+              res.data[x].up_count = res.data[x].d_count - res.data[x].d_old_count
+              arr1.push(res.data[x])
+              info.count += res.data[x].d_count
+              info.item = Number(x)
+            }
+            that.setData({
+              'info.count': info.count,
+              'info.item': info.item+1
+            })
+         
             arr1.sort(compare("up_count"));
             console.log(arr1)
 
@@ -137,9 +134,10 @@ Page({
             })
           },
           fail: function () {
+            wx.hideLoading()
             wx.showModal({
               title: '提示',
-              content: '读取数据失败，请检查网络或联系小程序管理人员',
+              content: '网络异常，读取数据失败',
               confirmColor: "#006ACC",
               success(res) {
                 if (res.confirm) {
@@ -149,6 +147,21 @@ Page({
                 }
               }
             })
+          }
+        })
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showModal({
+          title: '提示',
+          content: '网络异常，读取数据失败',
+          confirmColor: "#006ACC",
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
           }
         })
       }

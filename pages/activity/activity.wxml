@@ -1,0 +1,45 @@
+<!--pages/activity/activity.wxml-->
+<view class="container">
+  <view class="mask" style="display:{{display}}">
+      <view class="tips">
+        <swiper class="tip_swiper" autoplay='false' indicator-dots='ture' circular='false' interval="10000" indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)' skip-hidden-item-layout="true">
+        <swiper-item class="tip_item" wx:for="{{tipslist}}">
+          <image id="tip_img" src="{{item.img_src}}"></image>
+        </swiper-item>
+      </swiper>
+      </view>
+      
+      <view class="none">
+        <image src="../../images/cancel.png"  bindtap='display' ></image>
+      </view>
+    </view>
+  <view class="ac-list">
+    <view class="ac-item" wx:for="{{activity_data}}" wx:key="item.aid" bindtap='toIndex' data-aid="{{item.aid}}"
+     data-starttime="{{item.a_startTime}}" data-endtime="{{item.a_endTime}}">
+      <view class="ac-img">
+        <image src="{{item.a_img}}" mode="aspectFill"></image>
+      </view>
+
+      <view class="ac-name">
+        {{item.a_name}}
+      </view>
+
+      <view class="ac-number">
+        参与人数:{{item.number}}人
+      </view>
+      
+    </view>
+  </view>
+
+   <view class="circleBar">
+    <view class='scrollTop' bindtap='toPublish' wx:if="{{isShow == true}}" style='opacity:{{opacity}};transform:{{translate}}'>
+      <image src='../../images/publish.png'></image>
+    </view>
+    <!-- <view class='searchBar' bindtap='search' style='opacity:{{opacity}};transform:{{translate}}'>
+      <image src='../../images/publish.png'></image>
+    </view>
+    <view class='refreshBar' bindtap='onPullDownRefresh' style='opacity:{{opacity}};transform:{{translate}}'>
+      <image src='../../images/refresh.png'></image>
+    </view> -->
+  </view>
+</view>

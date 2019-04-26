@@ -1,4 +1,7 @@
 {
   "backgroundTextStyle": "dark",
-  "enablePullDownRefresh": true
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "van-icon": "../miniprogram_npm/vant-weapp/icon/index"
+  }
 }

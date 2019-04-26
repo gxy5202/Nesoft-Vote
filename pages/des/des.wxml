@@ -32,8 +32,13 @@
   </view>
 
 <view class='show-video' >
-  <txv-video wx:if="{{showlist.d_vidlink}}" vid="{{showlist.d_vidlink}}"  playerid="txv01" controls="true" autoplay="true" width="100%" height="400rpx" >
+  <txv-video wx:if="{{showlist.d_vidlink}}" vid="{{showlist.d_vidlink}}"  playerid="txv01" controls="true"  autoplay="true" width="100%" height="400rpx" >
   </txv-video>
+  
+  <view class="text" wx:if="{{showlist.d_vidlink == null}}">
+    <image src="../../images/fail.png"></image>
+    <text>此作者未上传视频</text> 
+  </view>
 </view>
   <view class='des'>
 
@@ -88,14 +93,19 @@
         <view class="line">{{showlist.d_des}}</view>
       </view>
     </view>
+    <button class="toRate" bindtap='toRate' data-id="{{showlist.d_id}}">
+      评分
+    </button>
     <button class="share" bindtap='share' open-type="share">
       <image src="../../images/share.png"></image>
       分享给朋友
     </button>
     <view class="bottom_tip">
       
-      感谢参与，本活动最终解释权归成都东软学院所有
+      感谢参与，本活动最终解释权归成都东软学院信管系所有
     </view>
   </view>
-  
+  <view class='backBar' wx:if="{{backid == 1}}" bindtap='toHome' >
+      <image src='../../images/bk.png'></image>
+  </view>
 </view>

@@ -6,9 +6,11 @@ Page({
    */
   data: {
     showlist:[],
+    loadlist: [],
     display:"flex",
     block:"none",
     searchData:"",
+    bottomText: "下拉加载更多",
     value:"",
     hotName:[],
     focus:true
@@ -23,7 +25,7 @@ Page({
       title: '加载中...',
     })
     wx.request({
-      url: 'https://www.gomi.site/search',
+      url: 'https://www.nsuim.cn/search',
       header: {
         'content-type': 'application/json'
       },
@@ -37,7 +39,7 @@ Page({
       fail: function () {
         wx.showModal({
           title: '提示',
-          content: '读取数据失败，请检查网络或联系小程序管理人员',
+          content: '网络异常，读取数据失败',
           confirmColor: "#006ACC",
           success(res) {
             if (res.confirm) {
@@ -62,7 +64,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
     var that =this
     var arr = []
     var searchData = that.data.searchData
@@ -74,7 +75,7 @@ Page({
         success: res => {
           console.log(res.code)
           wx.request({
-            url: 'https://www.gomi.site/data',
+            url: 'https://www.nsuim.cn/data',
             data: {
               code: res.code,
               Appid: "wx9e7455bc8709d727",
@@ -97,6 +98,20 @@ Page({
               }
               
 
+            },
+            fail: function () {
+              wx.showModal({
+                title: '提示',
+                content: '网络异常，读取数据失败',
+                confirmColor: "#006ACC",
+                success(res) {
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+                }
+              })
             }
           })
         }
@@ -129,7 +144,59 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+    var that = this
+    var showlist = that.data.showlist;
+    var loadlist = that.data.loadlist;
+    var key = wx.getStorageSync("key"); 
+    var arr = [];
+    wx.showLoading({
+      title: '加载中',
+    })
+    if (showlist.length + 10 > loadlist.length) {
+      for (var i in showlist) {
+        if (showlist[i].d_id == key.d_id) {
+          that.setData({
+            [`loadlist[${i}].d_count`]: key.d_count,
+            [`loadlist[${i}].iconid`]: key.iconid,
+          })
+        }
+      }
+      that.setData({
+        showlist: loadlist.slice(0, loadlist.length)
+      })
+      if (showlist.length == loadlist.length) {
+        that.setData({
+          bottomText: "已显示全部"
+        })
+        wx.showToast({
+          title: '已经到最后啦',
+          icon: 'none',
+        })
+      } else {
+        wx.hideLoading()
+      }
+    }
+    else {
+      for (var i in showlist) {
+        if (showlist[i].d_id == key.d_id) {
+          that.setData({
+            [`loadlist[${i}].d_count`]: key.d_count,
+            [`loadlist[${i}].iconid`]: key.iconid,
+          })
 
+        }
+      }
+      that.setData({
+        showlist: loadlist.slice(0, loadlist.length + 10)
+      })
+      wx.hideLoading()
+    }
+   
+
+          
+
+        
+     
   },
 
   /**
@@ -157,7 +224,7 @@ Page({
           wx.hideLoading();
           console.log(res.code)
           wx.request({
-            url: 'https://www.gomi.site/data',
+            url: 'https://www.nsuim.cn/data',
             data: {
               code: res.code,
               Appid: "wx9e7455bc8709d727",
@@ -169,36 +236,94 @@ Page({
             success: function (res) {
               var arr = []
               for (var x in res.data) {
-                if (searchData == res.data[x].d_id) {
+                if (res.data[x].d_id.indexOf(searchData) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr,
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  }
+                 
                 }
                 else if (res.data[x].d_name.indexOf(searchData) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  }
+                } else if (res.data[x].m_name.indexOf(searchData) != -1) {
+                  arr.push(res.data[x])
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  }
                 }
                 else if (res.data[x].d_st_name.indexOf(searchData) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  }
                 } else if (res.data[x].t_name.indexOf(searchData) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  }
                 }
                 
               }
@@ -211,11 +336,20 @@ Page({
               }
             },
             fail: function () {
-              wx.showToast({
-                title: '获取数据失败',
-                icon: 'none'
+              wx.showModal({
+                title: '提示',
+                content: '网络异常，读取数据失败',
+                confirmColor: "#006ACC",
+                success(res) {
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+                }
               })
             }
+           
           })
         },
        
@@ -254,7 +388,7 @@ Page({
           wx.hideLoading()
           console.log(res.code)
           wx.request({
-            url: 'https://www.gomi.site/data',
+            url: 'https://www.nsuim.cn/data',
             data: {
               code: res.code,
               Appid: "wx9e7455bc8709d727",
@@ -266,40 +400,102 @@ Page({
             success: function (res) {
               var arr = []
               for (var x in res.data) {
-                if (number == res.data[x].d_id) {
+                if (res.data[x].d_id.indexOf(number) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr,
-                    searchData: number
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  }
+                 
+                } else if (res.data[x].m_name.indexOf(searchData) != -1) {
+                  arr.push(res.data[x])
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                    })
+                  }
                 }
                 else if (res.data[x].d_name.indexOf(number) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr,
-                    searchData: number
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  }
                 }
                 else if (res.data[x].d_st_name.indexOf(number) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr,
-                    searchData: number
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  }
                 } else if (res.data[x].t_name.indexOf(number) != -1) {
                   arr.push(res.data[x])
-                  that.setData({
-                    display: "none",
-                    block: "flex",
-                    showlist: arr,
-                    searchData: number
-                  })
+                  if (arr.length <= 10) {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr,
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  } else {
+                    that.setData({
+                      'loadlist': arr,
+                      'showlist': arr.slice(0, 10),
+                      'display': "none",
+                      'block': "flex",
+                      searchData: number
+                    })
+                  }
                 }
               }
               if (that.data.showlist.length < 1) {
@@ -308,6 +504,20 @@ Page({
                   icon: "none"
                 })
               }
+            },
+            fail: function () {
+              wx.showModal({
+                title: '提示',
+                content: '网络异常，读取数据失败',
+                confirmColor: "#006ACC",
+                success(res) {
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+                }
+              })
             }
           })
         }
@@ -349,7 +559,7 @@ Page({
       success: res => {
         console.log(res.code)
         wx.request({
-          url: 'https://www.gomi.site/data',
+          url: 'https://www.nsuim.cn/data',
           data: {
             code: res.code,
             Appid: "wx9e7455bc8709d727",
@@ -362,40 +572,104 @@ Page({
             wx.hideLoading();
             var arr = []
             for (var x in res.data) {
-              if (value == res.data[x].d_id) {
+              if (res.data[x].d_id.indexOf(value) != -1) {
                 arr.push(res.data[x])
-                that.setData({
-                  display: "none",
-                  block: "flex",
-                  showlist: arr,
-                  searchData: value
-                })
+                if (arr.length <= 10) {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr,
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                } else {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10),
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                }
+             
               }
               else if (res.data[x].d_name.indexOf(value) != -1) {
                 arr.push(res.data[x])
-                that.setData({
-                  display: "none",
-                  block: "flex",
-                  showlist: arr,
-                  searchData: value
-                })
+                if (arr.length <= 10) {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr,
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                } else {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10),
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                }
+              } else if (res.data[x].m_name.indexOf(value) != -1) {
+                arr.push(res.data[x])
+                if (arr.length <= 10) {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr,
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                } else {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10),
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                }
               }
               else if (res.data[x].d_st_name.indexOf(value) != -1) {
                 arr.push(res.data[x])
-                that.setData({
-                  display: "none",
-                  block: "flex",
-                  showlist: arr,
-                  searchData: value
-                })
+                if (arr.length <= 10) {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr,
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                } else {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10),
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                }
               } else if (res.data[x].t_name.indexOf(value) != -1) {
                 arr.push(res.data[x])
-                that.setData({
-                  display: "none",
-                  block: "flex",
-                  showlist: arr,
-                  searchData: value
-                })
+                if (arr.length <= 10) {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr,
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                } else {
+                  that.setData({
+                    'loadlist': arr,
+                    'showlist': arr.slice(0, 10),
+                    'display': "none",
+                    'block': "flex",
+                    'searchData': value
+                  })
+                }
               } 
             }
             if (that.data.showlist.length < 1) {
@@ -404,9 +678,40 @@ Page({
                 icon: "none"
               })
             }
+          },
+          fail: function () {
+            wx.hideLoading()
+            wx.showModal({
+              title: '提示',
+              content: '网络异常，读取数据失败',
+              confirmColor: "#006ACC",
+              success(res) {
+                if (res.confirm) {
+                  console.log('用户点击确定')
+                } else if (res.cancel) {
+                  console.log('用户点击取消')
+                }
+              }
+            })
+          }
+        })
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showModal({
+          title: '提示',
+          content: '网络异常，读取数据失败',
+          confirmColor: "#006ACC",
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
           }
         })
       }
+
     });
   },
   todes: function (e) {
@@ -439,60 +744,108 @@ Page({
     var id = e.currentTarget.dataset.id
     var showlist = that.data.showlist
     console.log(id)
-    for (var x in showlist) {
-      if (showlist[x].d_id == id) {
-        var time = new Date(showlist[x].t_end_time);
-        var now = new Date();
-        var restTime = time - now;
-        console.log(restTime);
-        if (restTime < 0) {
-          wx.showToast({
-            title: "该活动投票已结束",
-            icon: "none",
-          })
-        } else {
-          wx.login({
-            success: res => {
-              console.log(res.code)
-              wx.request({
-                url: 'https://www.gomi.site/user',
-                data: {
-                  code: res.code,
-                  Appid: "wx9e7455bc8709d727",
-                  AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
-                  id: id
-                },
-                header: {
-                  'content-type': 'application/json'
-                },
-                success: function (next) {
-                  for (var x in showlist) {
-                    if (id == showlist[x].d_id) {
-                      that.setData({
-                        [`showlist[${x}].d_count`]: next.data.data[0].d_count,
-                        [`showlist[${x}].iconid`]: next.data.iconid
-                      })
-                    }
-                    wx.setStorage({
-                      key: 'key',
-                      data: showlist[x],
+    wx.getNetworkType({
+      success(res) {
+        const networkType = res.networkType
+        if (networkType != 'none'){
+          for (var x in showlist) {
+            if (showlist[x].d_id == id) {
+              var time = new Date(showlist[x].t_end_time);
+              var now = new Date();
+              var restTime = time - now;
+              console.log(restTime);
+              if (restTime < 0) {
+                wx.showToast({
+                  title: "该活动投票已结束",
+                  icon: "none",
+                })
+              } else {
+                wx.login({
+                  success: res => {
+                    console.log(res.code)
+                    wx.request({
+                      url: 'https://www.nsuim.cn/user',
+                      data: {
+                        code: res.code,
+                        Appid: "wx9e7455bc8709d727",
+                        AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+                        id: id
+                      },
+                      header: {
+                        'content-type': 'application/json'
+                      },
+                      success: function (next) {
+                        for (var x in showlist) {
+                          if (id == showlist[x].d_id) {
+                            that.setData({
+                              [`showlist[${x}].d_count`]: next.data.data[0].d_count,
+                              [`showlist[${x}].iconid`]: next.data.iconid
+                            })
+                            wx.setStorageSync('key', showlist[x])
+                          }
+                          
+                         
+                        }
+                        console.log(next.data)
+                        wx.showToast({
+                          title: next.data.tip,
+                          icon: "none",
+                        }
+                        )
+                      },
+                      fail: function () {
+                        wx.showModal({
+                          title: '提示',
+                          content: '网络异常，投票失败',
+                          confirmColor: "#006ACC",
+                          success(res) {
+                            if (res.confirm) {
+                              console.log('用户点击确定')
+                            } else if (res.cancel) {
+                              console.log('用户点击取消')
+                            }
+                          }
+                        })
+                      }
+                    })
+                  },
+                  fail: function () {
+                    wx.showModal({
+                      title: '提示',
+                      content: '网络异常，投票失败',
+                      confirmColor: "#006ACC",
+                      success(res) {
+                        if (res.confirm) {
+                          console.log('用户点击确定')
+                        } else if (res.cancel) {
+                          console.log('用户点击取消')
+                        }
+                      }
                     })
                   }
-                  console.log(next.data)
-                  wx.showToast({
-                    title: next.data.tip,
-                    icon: "none",
-                  }
-                  )
-                }
-              })
+                });
+              }
+
             }
-          });
+
+          }
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: '网络异常，投票失败',
+            confirmColor: "#006ACC",
+            success(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
         }
-
       }
+    })
 
-    }
   },
   onShareAppMessage: function (query) {
     var that = this;

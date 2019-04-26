@@ -12,13 +12,13 @@
 }
 .hot_title {
   width: 90%;
-  margin: auto;
-  font-size: 40rpx;
+  margin: 30rpx auto;
+  font-size: 35rpx;
   text-align: center;
 }
 .hot_title image {
-  width: 50rpx;
-  height: 50rpx;
+  width: 45rpx;
+  height: 45rpx;
 }
 .hot {
   width: 90%;
@@ -117,7 +117,7 @@ background: linear-gradient(to left, #3a7bd5, #00d2ff); /* W3C, IE 10+/ Edge, Fi
 }
 input{
   
-  width: 80%;
+  width: 90%;
   font-size: 30rpx;
 }
 
@@ -141,7 +141,28 @@ input{
   background-color: rgb(255, 255, 255);
   border-radius: 20rpx;
   box-shadow: 0px 6px 10px /*#706f6f*/ rgba(0, 0, 0, 0.2);
+}
+.show-item:nth-child(n){
   animation: show .5s ease-in-out;
+}
+.show-item:nth-child(2n){
+  animation: show2 .5s ease-in-out;
+}
+@keyframes show {
+  0%{
+    transform: translateX(-500rpx);
+  }
+  100%{
+    transform: translateX(0rpx);
+  }
+}
+@keyframes show2 {
+  0%{
+    transform: translateX(500rpx);
+  }
+  100%{
+    transform: translateX(0rpx);
+  }
 }
 @keyframes show {
   0%{
@@ -179,6 +200,12 @@ input{
   margin:auto;
   z-index: 1;
   animation: loading 3s linear infinite;
+}
+.no_img {
+  height: 100rpx;
+  width: 100rpx;
+  margin:auto;
+  z-index: 1;
 }
 @keyframes loading {
   0%{
@@ -279,13 +306,29 @@ input{
   margin-bottom:-5rpx;
 }
 .icon:hover {
-  animation: move .5s;
+  animation: clickShow2 .5s ease-in-out;
 }
 .icon-favorite {
   font-size: 30rpx;
   color: red;
 }
-
+@keyframes clickShow2 {
+  0%{
+    transform: scale(1);
+  }
+  30%{
+    transform: scale(1.2);
+  }
+  70%{
+    transform: scale(0.9);
+  }
+  90% {
+    transform: scale(1.03);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
 .bottom {
   height: 60rpx;
   width: 100%;
@@ -298,7 +341,7 @@ input{
 }
 
 .bottom text {
-  font-size: 25rpx;
+  font-size: 30rpx;
   color: #bdbdbd;
 }
 

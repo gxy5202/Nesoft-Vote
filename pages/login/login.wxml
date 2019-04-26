@@ -1,0 +1,14 @@
+<view class='container'>
+   <view class="user-type">
+      <view class='teacher' bindtap='toTeacher'>
+          <view>我是老师</view>
+      </view>
+      <view class='student' bindtap='toStudent'>
+          <view>我是学生</view>
+      </view>
+   </view>
+
+   <view class="back" bindtap='toIndex'>
+       <view>⇠</view>
+   </view>
+</view>

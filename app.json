@@ -5,10 +5,21 @@
     "pages/des/des",
     "pages/search/search",
     "pages/rank/rank",
-    "pages/rankSelect/rankSelect"
+    "pages/rankSelect/rankSelect",
+    "pages/upload/upload",
+    "pages/home/home",
+    "pages/post/post",
+    "pages/login/login",
+    "pages/publish/publish",
+    "pages/rate/rate",
+    "pages/voteIndex/voteIndex",
+    "pages/my/my",
+    "pages/teacher/teacher",
+    "pages/student/student",
+    "pages/activity/activity",
+    "pages/userRate/userRate"
   ],
   "window": {
-    
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#006ACC",
     "navigationBarTitleText": "校园展",
@@ -21,7 +32,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/activity/activity",
         "text": "首页",
         "iconPath": "images/home.png",
         "selectedIconPath": "images/home1.png"
@@ -31,14 +42,19 @@
         "text": "人气榜",
         "iconPath": "images/rank.png",
         "selectedIconPath": "images/rank1.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "个人",
+        "iconPath": "images/my1.png",
+        "selectedIconPath": "images/my.png"
       }
     ]
   },
   "plugins": {
     "tencentvideo": {
-      "version": "1.2.2",
+      "version": "1.2.5",
       "provider": "wxa75efa648b60994b"
     }
   }
-  
 }

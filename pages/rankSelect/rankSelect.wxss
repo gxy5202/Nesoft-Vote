@@ -119,6 +119,13 @@ background: linear-gradient(to top, #155799, #159957); /* W3C, IE 10+/ Edge, Fir
   font-weight: bolder;
   font-size: 38rpx;
   color:rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: space-between;
+}
+.rank_title>view:nth-child(2){
+  font-size: 35rpx;
+  color:#006ACC;
+  font-weight: normal;
 }
 .all,.day{
   margin-bottom: 30rpx;

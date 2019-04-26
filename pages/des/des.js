@@ -1,4 +1,4 @@
-// pages/des/des.js
+ // pages/des/des.js
 const txvContext = requirePlugin("tencentvideo");
 Page({
   
@@ -9,24 +9,32 @@ Page({
     showlist: [],
     time:"",
     timer:"",
-    end:"投票结束:"
+    end:"投票结束:",
+    backid:0,
+    aid:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(query) {
-    const scene = decodeURIComponent(query.scene)
-    console.log(query)
+    const scene = decodeURIComponent(query.scene);
+    let aid = query.aid;
     var that = this;
-    var id = query.id;
+    that.setData({
+      aid:aid
+    })
+    console.log(typeof(scene))
     
-    if(scene){
+    if (scene != 'undefined'){
+      that.setData({
+        backid: 1
+      })
       wx.login({
         success: res => {
           console.log(res.code)
           wx.request({
-            url: 'https://www.gomi.site/data',
+            url: 'https://www.nsuim.cn/data',
             data: {
               code: res.code,
               Appid: "wx9e7455bc8709d727",
@@ -35,7 +43,7 @@ Page({
             header: {
               'content-type': 'application/json'
             },
-            success: function (next) {
+            success: function (next) {              
               console.log(next.data)
               for(let x in next.data){
                 if (scene == next.data[x].d_id){
@@ -44,36 +52,56 @@ Page({
                   })
                 }
               }
-              
-              
+ 
               wx.hideLoading(
   
               )
               
             }
+            
           })
         }
       });          
-    };
+    }else if(scene == 'undefined'){
+      that.setData({
+        backid: 0
+      })
+    }
+      wx.getStorage({
+        key: 'key',
+        success: function (res) {
+          that.setData({
+            showlist: res.data
+          })
+        },
+        fail: function () {
+          wx.showModal({
+            title: '提示',
+            content: '网络异常，读取数据失败',
+            confirmColor: "#006ACC",
+            success(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
+              }
+            }
+          })
+        }
+      })
     
     wx.getStorage({
-      key: 'key',
-      success: function(res) {
-        that.setData({
-          showlist: res.data
-        })
-      },
-    })
-    wx.getStorage({
-      key: 'time',
+      key: 'endTime',
       success: function (res) {
         // 位数不足补零
+        let mytime = new Date(Number(res.data.endTime))
+        console.log(mytime)
         function fill_zero_prefix(num) {
           return num < 10 ? "0" + num : num
         }
 
         var timer = setInterval(function () {
-          var time = new Date(res.data);
+          var time = new Date(mytime);
           var now = new Date();
           var restTime = time - now;
           var day = restTime / 1000 / 60 / 60 / 24;
@@ -141,7 +169,11 @@ Page({
   onReady: function() {
 
   },
-
+  toHome: function () {
+    wx.switchTab({
+      url: '/pages/index/index',
+    })
+  },
   /**
    * 生命周期函数--监听页面显示
    */
@@ -204,48 +236,83 @@ Page({
     var id = e.currentTarget.dataset.id
     var showlist = that.data.showlist
     console.log(id)
-    if(that.data.end == "已结束"){
-      wx.showToast({
-        title: "该活动投票已结束",
-        icon: "none",
-      })
-    }else{
-      wx.login({
-        success: res => {
-          console.log(res.code)
-          wx.request({
-            url: 'https://www.gomi.site/user',
-            data: {
-              code: res.code,
-              Appid: "wx9e7455bc8709d727",
-              AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
-              id: id
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (next) {
-              if (id == showlist.d_id) {
-                that.setData({
-                  [`showlist.d_count`]: next.data.data[0].d_count,
-                  [`showlist.iconid`]: next.data.iconid
+    wx.getNetworkType({
+      success(res) {
+        const networkType = res.networkType
+        if (networkType != 'none'){
+          if (that.data.end == "已结束") {
+            wx.showToast({
+              title: "该活动投票已结束",
+              icon: "none",
+            })
+          } else {
+            wx.login({
+              success: res => {
+                console.log(res.code)
+                wx.request({
+                  url: 'https://www.nsuim.cn/user',
+                  data: {
+                    code: res.code,
+                    Appid: "wx9e7455bc8709d727",
+                    AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+                    id: id
+                  },
+                  header: {
+                    'content-type': 'application/json'
+                  },
+                  success: function (next) {
+                    if (id == showlist.d_id) {
+                      that.setData({
+                        [`showlist.d_count`]: next.data.data[0].d_count,
+                        [`showlist.iconid`]: next.data.iconid
+                      })
+                    }
+                    wx.setStorage({
+                      key: 'key',
+                      data: showlist,
+                    })
+                    console.log(next.data)
+                    wx.showToast({
+                      title: next.data.tip,
+                      icon: "none",
+                    }
+                    )
+                  },
+                  fail: function () {
+                    wx.showModal({
+                      title: '提示',
+                      content: '网络异常，投票失败',
+                      confirmColor: "#006ACC",
+                      success(res) {
+                        if (res.confirm) {
+                          console.log('用户点击确定')
+                        } else if (res.cancel) {
+                          console.log('用户点击取消')
+                        }
+                      }
+                    })
+                  }
                 })
               }
-              wx.setStorage({
-                key: 'key',
-                data: showlist,
-              })
-              console.log(next.data)
-              wx.showToast({
-                title: next.data.tip,
-                icon: "none",
+            });
+          }
+        }else {
+          wx.showModal({
+            title: '提示',
+            content: '网络异常，投票失败',
+            confirmColor: "#006ACC",
+            success(res) {
+              if (res.confirm) {
+                console.log('用户点击确定')
+              } else if (res.cancel) {
+                console.log('用户点击取消')
               }
-              )
             }
           })
         }
-      });
-    }
+      }
+    })
+ 
     
     
   },
@@ -254,6 +321,73 @@ Page({
       
     })
     this.onShareAppMessage();
-  }
+  },
   
+  toRate(e){
+    var that = this;
+    let aid = that.data.aid;
+    let d_id = e.currentTarget.dataset.id;
+    wx.showLoading({
+      title: '正在跳转..',
+    })
+    wx.login({
+      success: function (res) {
+        wx.request({
+          url: 'https://www.nsuim.cn/rate_query',
+          data: {
+            code: res.code,
+            Appid: "wx9e7455bc8709d727",
+            AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+            d_id: d_id
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            console.log(res.data);
+            
+            
+            //let newScore = JSON.parse(JSON.parse(res.data.score[0].d_score_user).fakeScore);
+            
+            if(res.data.status === 0){
+              
+              wx.navigateTo({
+                url: '../userRate/userRate?aid=' + aid + '&d_id=' + d_id + '&already=' + 0,
+              })
+              wx.hideLoading()
+            }
+            else {
+              let fakeScore = JSON.parse(res.data.score[0].d_score_user);
+              let score = JSON.parse(fakeScore[0].fakeScore);
+              wx.setStorage({
+                key: 'score',
+                data: score
+              })
+              
+              wx.navigateTo({
+                url: '../userRate/userRate?aid=' + aid + '&d_id=' + d_id+'&already='+1,
+              })
+              wx.hideLoading()
+            }
+          },
+          fail: function () {
+            wx.showModal({
+              title: '提示',
+              content: '网络异常，读取数据失败',
+              confirmColor: "#006ACC",
+              success(res) {
+                if (res.confirm) {
+
+                } else if (res.cancel) {
+
+                }
+              }
+            })
+          }
+
+        })
+      }
+    })
+    
+  }
 })

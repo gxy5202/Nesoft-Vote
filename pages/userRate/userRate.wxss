@@ -1,0 +1,43 @@
+/* pages/userRate/userRate.wxss */
+page {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
+}
+
+.container .rate-choose {
+  height: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.container .rate-choose .rate-item {
+  text-align: center;
+  margin: 50rpx;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container button {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 100rpx;
+  width: 95%;
+  background: #006acc;
+  color: white;
+}
+/*# sourceMappingURL=userRate.wxss.map */

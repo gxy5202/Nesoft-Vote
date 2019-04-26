@@ -1,0 +1,13 @@
+
+<!--pages/teacher/teacher.wxml-->
+<view class="container">
+  <view class="login">
+    <view class="s-number">
+      <input type='number' placeholder='请输入您的学号' bindinput='getStudentNumber'></input>
+    </view>
+    <view class="s-id-number">
+      <input type='number' placeholder='请输入您的身份证号' bindinput='getStudentIdNumber'></input>
+    </view>
+    <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
+  </view>
+</view>

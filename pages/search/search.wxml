@@ -3,7 +3,7 @@
 
   <view class='search'>
     <view class='search-input'>
-      <input type="search" placeholder='输入作品编号、名称、参赛类型或作者' value="{{value}}" focus="true" confirm-type="doneconfirm-type" bindconfirm="getNumber" bindinput='getLength' bconfirm-type="search"  ></input>
+      <input type="search" placeholder='作品编号、名称、参赛类型、专业或作者' value="{{value}}" focus="true" confirm-type="doneconfirm-type" bindconfirm="getNumber" bindinput='getLength' bconfirm-type="search"  ></input>
       <image src='../../images/search3.png' bindtap="imgSearch"></image>
     </view>
   </view>
@@ -19,7 +19,8 @@
    <view class='show' style='display:{{block}}'>
     <view class='show-item' wx:for="{{showlist}}" bindtap='todes' data-index='{{index}}' data-id='{{item.d_id}}'>
       <view class='show-pic'>
-        <image class="imgLoad" src='../../images/loading.png'  lazy-load='true' ></image>
+        <image class="imgLoad" wx:if="{{item.d_imglink}}" src='../../images/loading.png'  lazy-load='true' ></image>
+        <image wx:if="{{item.d_imglink == null}}" class="no_img" src='../../images/fail.png'  lazy-load='true' ></image>
         <image class="img" src='{{item.d_imglink}}' mode='aspectFill'></image>
       </view>
       <view class='show-content'>
@@ -50,7 +51,7 @@
     </view>
   </view> 
 
-  <view class='bottom'>
-     <text>再翻也没有啦~~</text>
+  <view class='bottom' style='display:{{block}}'>
+     <text>{{bottomText}}</text>
   </view>
 </view>

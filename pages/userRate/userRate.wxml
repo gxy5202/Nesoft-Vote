@@ -1,0 +1,13 @@
+<!--pages/userRate/userRate.wxml-->
+<view class='container'>
+  <view class="rate-choose" >
+    <view class="rate-item" wx:for="{{rateData}}" wx:key="{{item.id}}">
+        <view>{{item.rateName}}</view>
+        <van-rate wx:if="{{already == 0}}" value="{{ item.value }}" size="30" bind:change="onChange" data-index="{{index}}"/>
+        <van-rate wx:if="{{already == 1}}" value="{{ item.newScore }}" size="30" readonly bind:change="onChange" data-index="{{index}}"/>
+        <van-rate wx:if="{{already == 2}}" value="{{ item.value }}" size="30" readonly bind:change="onChange" data-index="{{index}}"/>
+    </view>
+  </view>
+
+  <button wx:if="{{already == 0}}" bindtap='confirm'>确认</button>
+</view>

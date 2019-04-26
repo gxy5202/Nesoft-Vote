@@ -1,0 +1,68 @@
+/* pages/rate/rate.wxss */
+
+@mixin flex-around {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@mixin flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+page {
+  height: 100%;
+}
+.container {
+  background: rgba(0,0,0,0.02);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 100%;
+  .rate-box {
+      
+      width: 100%;
+      height: 80%;
+      .rate-item {
+        @include flex-around();
+        margin:30rpx auto;
+        width: 95%;
+        height:120rpx;
+        border-radius: 10rpx;
+        background: rgba(255,255,255,1);
+        padding:5rpx;
+        font-size: 30rpx;
+        color:rgb(0,0,0);
+        box-shadow: 0 5rpx 10rpx rgba(0,0,0,0.3);
+        animation:itemShow 0.5s linear;
+      }
+      @keyframes itemShow{
+        0%{
+          transform: translateY(-20rpx)
+        }
+        100%{
+          ransform: translateY(0)
+        }
+      }
+      .add-box {
+        position: absolute;
+        margin: auto;
+        left:0;
+        right:0;
+        bottom: 0;
+        top:500rpx;
+        
+        text-align: center;
+        margin-top: 100rpx;
+      }
+      
+  }
+  button {
+    
+    width: 95%;
+    background: rgb(0,106,204);
+    color:white;
+  }
+}

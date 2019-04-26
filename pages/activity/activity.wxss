@@ -1,0 +1,209 @@
+/* pages/activity/activity.wxss */
+.container .mask {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+}
+
+.container .mask .tips h1 {
+  font-size: 40rpx;
+  font-weight: bolder;
+  color: white;
+}
+
+.container .mask .tips h1:after {
+  content: "";
+  display: block;
+  width: 100rpx;
+  height: 5rpx;
+  margin: 10rpx auto;
+  background: #ffa500;
+}
+
+.container .mask .tips {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 70%;
+  height: 600rpx;
+  -webkit-box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+          box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
+}
+
+.container .tip_swiper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 20rpx;
+}
+
+.container .tip_item {
+  display: block;
+  border-radius: 20rpx;
+  width: 100%;
+  height: 100%;
+}
+
+.container #tip_img {
+  display: block;
+  border-radius: 20rpx;
+  height: 100%;
+  width: 100%;
+}
+
+.container .mask .none {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 750rpx;
+  width: 80%;
+  height: 60rpx;
+  text-align: center;
+}
+
+.container .mask .none image {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.container #topSwiper {
+  height: 500rpx;
+  position: relative;
+}
+
+.container .ac-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 95%;
+  margin: auto;
+}
+
+.container .ac-list .ac-item {
+  width: 48%;
+  height: 400rpx;
+  margin-top: 20rpx;
+  -webkit-box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.3);
+          box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  border-radius: 10rpx;
+}
+
+.container .ac-list .ac-item .ac-img {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  overflow: hidden;
+  width: 100%;
+  height: 300rpx;
+}
+
+.container .ac-list .ac-item .ac-img image {
+  width: 100%;
+}
+
+.container .ac-list .ac-item .ac-name {
+  margin-top: 8rpx;
+  margin-left: 10rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.container .ac-list .ac-item .ac-number {
+  margin-top: 8rpx;
+  margin-left: 10rpx;
+  font-size: 25rpx;
+}
+
+.container .scrollTop, .container .searchBar, .container .refreshBar {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-right: 40rpx;
+  right: 8rpx;
+  bottom: 30rpx;
+  z-index: 999;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: white;
+  -webkit-box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  -webkit-transition: .5s ease-in-out;
+  transition: .5s ease-in-out;
+}
+
+.container .searchBar {
+  right: 130rpx;
+}
+
+.container .refreshBar {
+  right: 250rpx;
+}
+
+.container .scrollTop image {
+  width: 45rpx;
+  height: 45rpx;
+}
+
+.container .searchBar image, .container .refreshBar image {
+  width: 65rpx;
+  height: 65rpx;
+}
+
+.container .refreshBar image:hover {
+  -webkit-animation: fresh .6s linear;
+          animation: fresh .6s linear;
+}
+
+@-webkit-keyframes fresh {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes fresh {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+/*# sourceMappingURL=activity.wxss.map */

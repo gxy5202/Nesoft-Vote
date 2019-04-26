@@ -1,0 +1,30 @@
+/* pages/userRate/userRate.wxss */
+page {
+    height: 100%;
+}
+.container {
+    height: 100%;
+    .rate-choose {
+        height: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .rate-item {
+            
+            text-align: center;
+            margin:50rpx;
+            border-bottom: 1px solid rgba(0,0,0,0.1)
+        }
+    }
+    button {
+        position: absolute;
+        margin:auto;
+        left:0;
+        right:0;
+        bottom: 100rpx;
+        width: 95%;
+        background: rgb(0,106,204);
+        color:white;
+    }
+}
