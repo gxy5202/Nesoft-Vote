@@ -12,7 +12,7 @@
       <image src="../../images/cancel.png"  bindtap='display' ></image>
     </view>
   </view> -->
-  <view id="topSwiper" >
+  <!-- <view id="topSwiper" >
     <swiper autoplay='false' indicator-dots='ture' circular='ture' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)'>
       <swiper-item wx:for="{{bannerlist}}">
         <image src="{{item.img_src}}" class='banner-pic'></image>
@@ -22,11 +22,44 @@
       <text>信管系小学期学生作品展</text>
       <text style='font-size:12pt;'>构思、设计、实现、运作</text>
     </view>
+    
+    <view class='ac-info>
+      <view class="ac-name">
+        {{1}}
+      </view>
+      <view class="ac-des">
+        {{1}}
+      </view>
+      <view class="ac-range">
+        {{1}}
+      </view>
+    </view>
+  </view> -->
+
+  <view class="topInfo">
+      <image src="{{acInfo.a_img}}" mode='aspectFill'></image>
+      <view class="ac-info">
+        <view class="ac-name">
+          {{acInfo.a_name}}
+        </view>
+        <view class="ac-des">
+          {{acInfo.a_des}}
+        </view>
+        <view class="ac-range">
+          范围：{{acInfo.a_range}}
+        </view>
+        <view class="ac-time">
+          截止：{{acInfo.a_endTime}}
+        </view>
+      </view>
+      
   </view>
-  <view class='search' bindtap='search'>
+
+
+  <!-- <view class='search' bindtap='search'>
       <image src='../../images/search2.png'></image>
       <view>查找作品</view>
-  </view>
+  </view> -->
 
   <view class='selectFixed' style='position:{{rel}}'></view>
   <view class="pick" id="picker" style='position:{{fixed}};top:{{top}}'  > 
@@ -43,8 +76,11 @@
       </picker>
   </view>
 
- 
-
+  <!-- 上传作品 -->
+  <view class="upload" bindtap='student_upload'>
+    <text>上传作品</text>
+    <van-icon name="upgrade" color="#006ACC" size="18px"/>
+  </view>
 
   <view class='show'>
     <view class='show-item' wx:for="{{showlist}}" bindtap='todes' data-index='{{index}}' data-id='{{item.d_id}}' >

@@ -121,19 +121,29 @@ Page({
     var that = this;
     wx.chooseImage({
       count: 1,
-      sizeType: ['original', 'compressed'],
+      sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success(res) {
         const tempFilePaths = res.tempFilePaths;
         let base64 = wx.getFileSystemManager().readFileSync(tempFilePaths[0], "base64");
-        that.setData({
-          imgUrl: tempFilePaths[0],
-          base64:base64
-        })
-        wx.showToast({
-          title: base64,
-        })
-        console.log(base64)
+        
+        if (res.tempFiles[0].size > 200000) {
+          wx.showToast({
+            title: "图片大小不得超过200kb",
+            icon:"none"
+          })
+        }else {
+          that.setData({
+            imgUrl: tempFilePaths[0],
+            base64: base64
+          })
+          wx.showToast({
+            title: "图片上传成功",
+          })
+          console.log(that.data.imgUrl)
+        }
+       
+        //console.log(res.tempFiles)
         
       }
     })
@@ -308,13 +318,76 @@ Page({
     let base64 = that.data.base64;
     let userid = app.globalData.userid.slice(1);
     if (acName !== '' && rangeData.startTime !== '' && rangeData.endTime !== '' && acDate !== '' && rateStatus === '已设置' && base64 !== ''){
-      wx.showLoading({
-        title: '正在发布...',
+      // wx.showLoading({
+      //   title: '正在发布...',
+      // })
+      
+      
+      //上传
+      console.log(userid.slice(0));
+
+      
+      let promise = new Promise((resolve, reject) => {
+        return resolve('OK')
+      })
+      promise
+      .then((val)=>{
+
+        /*
+        wx.request({
+          url: 'https://cuntuku.com/api/1/upload/',
+          data: {
+            key: '584bf3b4398f4e01f695cc0c50253110',
+            source: base64
+          },
+          header: {},
+          method: 'POST',
+          dataType: 'json',
+          responseType: 'text',
+          success: function(res) {
+            console.log(res.data)
+          },
+          fail: function(res) {},
+          complete: function(res) {},
+        })
+        */
+
+        /*
+        wx.uploadFile({
+          
+          url: 'https://www.nsuim.cn/publish_upload',
+          filePath: imgUrl,
+          //key:'584bf3b4398f4e01f695cc0c50253110',
+          //source: imgUrl,
+          name: 'a_img',
+          formData:{
+            a_owner: userid,
+            a_name: acName,
+            a_range: rangeData.join(','),
+            a_startTime: acDate.startTime,
+            a_endTime: acDate.endTime,
+            a_rate: JSON.stringify(rateInfo.info),
+            a_des: acDes,
+            a_img: imgUrl
+          },
+          success: function (res) {
+            console.log(res.data);
+            // let imgData = JSON.parse(res.data);
+            // let a_img = imgData.url
+            // console.log(a_img)
+          },
+          fail:function(){
+
+          }
+        })
+        */
+      })
+      .then((val)=>{
+
       })
       
-      console.log(base64)
-      //上传
-      console.log(userid.slice(0))
+
+      
       wx.request({
         url: 'https://www.nsuim.cn/publish_upload',//上传接口
         data: {
@@ -350,6 +423,7 @@ Page({
           })
         }
       })
+      
     }
     else{
       wx.showToast({

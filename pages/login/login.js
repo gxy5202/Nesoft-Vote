@@ -1,4 +1,5 @@
 // pages/login/login.js
+const app = getApp();
 Page({
 
   /**
@@ -12,7 +13,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    
   },
 
   /**
@@ -66,6 +67,9 @@ Page({
 
   //跳转到老师
   toTeacher(){
+    if (app.globalData.userid.indexOf('t') !== -1) {
+      
+    }
     wx.navigateTo({
       url: '../teacher/teacher',
     })

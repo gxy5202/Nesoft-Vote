@@ -31,7 +31,7 @@
  
   </view>
 
-<view class='show-video' >
+<view class='show-video' wx:if="{{showlist.d_vidlink !== ''}}">
   <txv-video wx:if="{{showlist.d_vidlink}}" vid="{{showlist.d_vidlink}}"  playerid="txv01" controls="true"  autoplay="true" width="100%" height="400rpx" >
   </txv-video>
   
@@ -39,7 +39,19 @@
     <image src="../../images/fail.png"></image>
     <text>此作者未上传视频</text> 
   </view>
+ 
 </view>
+
+<!-- 图片展示 -->
+<view class="show-img" wx:if="{{showlist.d_img_list[0] !== ''}}">
+  <swiper class="tip_swiper" autoplay='true' indicator-color='#E6E6FA' indicator-active-color='rgb(255, 204, 0)' skip-hidden-item-layout="true" previous-margin="10rpx" next-margin="30rpx">
+      <swiper-item class="tip_item" wx:for="{{showlist.d_img_list}}" data-index="{{index}}" bindtap="toRank">
+        <image src='{{item}}' mode='aspectFill' data-img="{{item}}" data-all="{{showlist.d_img_list}}" bindtap='preview'></image>  
+      </swiper-item>
+    </swiper>
+</view>
+<!-- 图片展示 -->
+
   <view class='des'>
 
     <view class="vote">

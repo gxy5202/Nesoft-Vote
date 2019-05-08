@@ -51,7 +51,7 @@ Page({
       grade:"全部",
       major:"全部"
     },
-    
+    acInfo:"",
 
   },
   onLoad:function(options){
@@ -201,6 +201,10 @@ Page({
     var that = this
     var showlist = that.data.showlist;
     var key = wx.getStorageSync("key"); 
+    var acInfo = wx.getStorageSync("acInfo"); 
+    that.setData({
+      acInfo:acInfo
+    })
     var index = that.data.index
     var grade = that.data.range[0][index[0]]
     var major = that.data.range[1][index[1]];
@@ -210,85 +214,38 @@ Page({
       major: major
     }
     var arr = [];
-    console.log(finalSelect.grade)
-      wx.login({
-        success: res => {
-          console.log(res.code)
-          wx.request({
-            url: 'https://www.nsuim.cn/data',
-            data: {
-              code: res.code,
-              Appid: "wx9e7455bc8709d727",
-              AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
-              aid:aid
-            },
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function (next) {
-              var showlist = that.data.showlist
-              console.log(next.data)
-              if (finalSelect.grade != "全部" || finalSelect.major != "全部"){
-                for (var i in showlist) {
-                  if (showlist[i].d_id == key.d_id) {
-                    that.setData({
-                      [`showlist[${i}].d_count`]: key.d_count,
-                      [`showlist[${i}].iconid`]: key.iconid
-                    })
-                  }
-                }
-              } else {
-                if (showlist.length < 1) {
-                  that.setData({
-                    //showlist: next.data,
-                    showlist: next.data.slice(0, 10),
-                    [`index[${0}]`]: 0,
-                    [`index[${1}]`]: 0,
-                  })
-                }else{
-                  that.setData({
-                    //showlist: next.data,
-                    showlist: next.data.slice(0, showlist.length),
-                    [`index[${0}]`]: 0,
-                    [`index[${1}]`]: 0,
-                  })
-                }
-              }
-            },
-            fail: function () {
-              
-              wx.showModal({
-                title: '提示',
-                content: '网络异常，读取数据失败',
-                confirmColor: "#006ACC",
-                success(res) {
-                  if (res.confirm) {
-                    console.log('用户点击确定')
-                  } else if (res.cancel) {
-                    console.log('用户点击取消')
-                  }
-                }
-              })
-            }
+    console.log(finalSelect.grade);
+    let lazyDetails = function(next){
+      if (finalSelect.grade != "全部" || finalSelect.major != "全部") {
+        for (var i in showlist) {
+          if (showlist[i].d_id == key.d_id) {
+            that.setData({
+              [`showlist[${i}].d_count`]: key.d_count,
+              [`showlist[${i}].iconid`]: key.iconid
+            })
+          }
+        }
+      } else {
+        if (showlist.length < 1) {
+          that.setData({
+            //showlist: next.data,
+            showlist: next.data.slice(0, 10),
+            [`index[${0}]`]: 0,
+            [`index[${1}]`]: 0,
           })
-        },
-        fail: function () {
-          
-          wx.showModal({
-            title: '提示',
-            content: '网络异常，读取数据失败',
-            confirmColor: "#006ACC",
-            success(res) {
-              if (res.confirm) {
-                console.log('用户点击确定')
-              } else if (res.cancel) {
-                console.log('用户点击取消')
-              }
-            }
+        } else {
+          that.setData({
+            //showlist: next.data,
+            showlist: next.data.slice(0, showlist.length),
+            [`index[${0}]`]: 0,
+            [`index[${1}]`]: 0,
           })
         }
-      });                   
-                                                                               
+      }
+    }
+    //发送请求
+    lazyload.lazyLoad('https://www.nsuim.cn/data', "wx9e7455bc8709d727", "66dbfa9fcf37f5b381bcac0532400da8", aid, lazyDetails);
+                                                                         
   },
   onHide:function(){
  
@@ -476,7 +433,7 @@ Page({
  
   onPageScroll:function(res){
     var that = this
-    wx.createSelectorQuery().select('#topSwiper').boundingClientRect(function (rect) {
+    wx.createSelectorQuery().select('.topInfo').boundingClientRect(function (rect) {
       console.log(rect.bottom)
       scrollOffset: true
       if (rect.bottom < 0) {
@@ -523,8 +480,9 @@ Page({
   },
 
   search: function() {
+    let aid = this.data.aid
     wx.navigateTo({
-      url: '/pages/search/search',
+      url: '/pages/search/search?aid='+aid,
     })
   },
   todes: function(e) {
@@ -857,7 +815,176 @@ Page({
   //获取到顶部距离
   clickAnimation:function(){
     var that = this
-   
+    
+  },
+
+  //学生上传
+  student_upload(){
+    var that = this;
+    var aid = that.data.aid;
+    var studentInfo = app.globalData.studentInfo;
+    var studentRange = [studentInfo.g_name, studentInfo.dept_name, studentInfo.m_name];
+    console.log(app.globalData.studentInfo );
+
+    function rangeInfo(){
+      
+      if (acInfo.a_range[0] == '全部' && acInfo.a_range[1] == '全部' && acInfo.a_range[2] == '全部') {
+        wx.navigateTo({
+          url: '../upload/upload?aid='+aid,
+        })
+      }
+      //年级系别不限时
+      else if (acInfo.a_range[0] == '全部' && acInfo.a_range[1] == '全部') {
+        if (studentRange[2] !== acInfo.a_range[2]) {
+          wx.showToast({
+            title: '抱歉！您的专业不符合参与条件',
+            icon: 'none'
+          })
+        }
+        else {
+          wx.navigateTo({
+            url: '../upload/upload?aid='+aid,
+          })
+        }
+      }
+      //年级不限时
+      else if (acInfo.a_range[0] == '全部') {
+        if (studentRange[1] !== acInfo.a_range[1]) {
+          wx.showToast({
+            title: '抱歉！您的系别不符合参与条件',
+            icon: 'none'
+          })
+        }
+        else {
+          if (acInfo.a_range[2] !== '全部' && studentRange[2] !== acInfo.a_range[2]) {
+            wx.showToast({
+              title: '抱歉！您的专业不符合参与条件',
+              icon: 'none'
+            })
+          }
+          else if (studentRange[2] == acInfo.a_range[2] || acInfo.a_range[2] == '全部'){
+            wx.navigateTo({
+              url: '../upload/upload?aid='+aid,
+            })
+          }
+        }
+      }
+      //限定年级时
+      else if (acInfo.a_range[0] !== '全部') {
+        if (studentRange[0] !== acInfo.a_range[0]) {
+          wx.showToast({
+            title: '抱歉！您的年级不符合参与条件',
+            icon: 'none'
+          })
+        }
+        else {
+          //系别
+          if (acInfo.a_range[1] !== '全部' && studentRange[1] !== acInfo.a_range[1]) {
+            wx.showToast({
+              title: '抱歉！您的系别不符合参与条件',
+              icon: 'none'
+            })
+          }
+          else if (acInfo.a_range[1] == '全部') {
+            //专业
+            if (acInfo.a_range[2] !== '全部' && studentRange[2] !== acInfo.a_range[2]) {
+              wx.showToast({
+                title: '抱歉！您的系别不符合参与条件',
+                icon: 'none'
+              })
+            }
+            else if (acInfo.a_range[2] == '全部' || studentRange[2] == acInfo.a_range[2]) {
+              wx.navigateTo({
+                url: '../upload/upload?aid='+aid,
+              })
+            }
+          }
+          else if (studentRange[1] == acInfo.a_range[1]) {
+            if (acInfo.a_range[2] !== '全部' && studentRange[2] !== acInfo.a_range[2]) {
+              wx.showToast({
+                title: '抱歉！您的系别不符合参与条件',
+                icon: 'none'
+              })
+            }
+            else if (acInfo.a_range[2] == '全部' || studentRange[2] == acInfo.a_range[2]) {
+              wx.navigateTo({
+                url: '../upload/upload?aid='+aid,
+              })
+            }
+          }
+        }
+      }
+    };
+    let acInfo = that.data.acInfo;
+    wx.getSetting({
+      success(res) {
+
+        // res.authSetting = {
+        //   "scope.userInfo": true,
+        //   "scope.userLocation": true
+        // }
+
+        //判断是否已经登录
+        if (JSON.stringify(res.authSetting) === "{}" || app.globalData.userid === '') {
+          wx.reLaunch({
+            url: '../login/login',
+          })
+          return
+        } else {
+          //判断是否符合参与范围
+          //允许全部时
+          if (studentInfo !== '') {
+            rangeInfo();
+          }
+          else {
+            wx.showToast({
+              title: '仅限学生上传作品',
+              icon:'none'
+            })
+          }
+          
+        }
+
+        for (let i in res.authSetting) {
+          if (res.authSetting[i] !== true || app.globalData.userid === '') {
+            wx.reLaunch({
+              url: '../login/login',
+            })
+            return
+          } else {
+            //判断是否符合参与范围
+            if (studentInfo !== '') {
+              rangeInfo();
+            }
+            else {
+              wx.showToast({
+                title: '仅限学生上传作品',
+                icon: 'none'
+              })
+            }
+          }
+        }
+      }
+    })
+    wx.checkSession({
+      success() {
+        // session_key 未过期，并且在本生命周期一直有效
+        //获取用户信息
+        wx.getUserInfo({
+          success(res) {
+            that.setData({
+              userInfo: res.userInfo,
+              name: app.globalData.username
+            })
+
+          }
+        })
+      },
+      fail() {
+        // session_key 已经失效，需要重新执行登录流程
+        wx.login() // 重新登录
+      }
+    })
   }
 
 })

@@ -389,5 +389,16 @@ Page({
       }
     })
     
+  },
+
+  // 预览图片
+  preview(e){
+    var that = this;
+    let current = e.currentTarget.dataset.img;
+    let allImg = e.currentTarget.dataset.all;
+    wx.previewImage({
+      current: current,
+      urls: allImg,
+    })
   }
 })

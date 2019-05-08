@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "van-rate": "../miniprogram_npm/vant-weapp/rate/index"
+    "van-rate": "../miniprogram_npm/vant-weapp/rate/index",
+    "van-toast": "../miniprogram_npm/vant-weapp/toast/index"
   }
 }

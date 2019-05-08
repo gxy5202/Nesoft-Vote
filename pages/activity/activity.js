@@ -9,7 +9,8 @@ Page({
     display: "block",
     activity_data:[],
     tipslist: [],
-    isShow:true
+    isShow:true,
+    name:''
   },
 
   /**
@@ -81,6 +82,31 @@ Page({
 
     })
     */
+    wx.checkSession({
+      success() {
+        // session_key 未过期，并且在本生命周期一直有效
+        //获取用户信息
+        wx.getUserInfo({
+          success(res) {
+            if (app.globalData.userid.indexOf('t') !== -1){
+              that.setData({
+                isShow:true
+              })
+            }
+            else {
+              that.setData({
+                isShow: false
+              })
+            }
+            
+          }
+        })
+      },
+      fail() {
+        // session_key 已经失效，需要重新执行登录流程
+        wx.login() // 重新登录
+      }
+    })
   },
 
   /**
@@ -102,10 +128,12 @@ Page({
         'content-type': 'application/json'
       },
       success: function (res) {
-        console.log(res.data)
+        console.log(res);
         that.setData({
           activity_data: res.data
         })
+        
+        
       },
       fail: function () {
         wx.showModal({
@@ -168,13 +196,23 @@ Page({
     let aid = e.currentTarget.dataset.aid;
     let startTime = e.currentTarget.dataset.starttime;
     let endTime = e.currentTarget.dataset.endtime;
-    console.log(endTime)
+    let info = e.currentTarget.dataset.info;
+    info.a_range = info.a_range.split(',');
+    info.a_startTime = new Date(Number(info.a_startTime)).toLocaleString();
+    info.a_endTime = new Date(Number(info.a_endTime)).toLocaleString();
+    console.log(info)
+    //存下活动截止时间
     wx.setStorage({
       key: 'endTime',
       data: {
         'startTime':startTime,
         'endTime':endTime
       },
+    })
+    //存下活动信息
+    wx.setStorage({
+      key: 'acInfo',
+      data: info,
     })
     wx.navigateTo({
       url: '../index/index?aid=' + aid,
@@ -236,6 +274,7 @@ Page({
               userInfo: res.userInfo,
               name: app.globalData.username
             })
+
           }
         })
       },

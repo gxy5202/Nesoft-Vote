@@ -127,6 +127,7 @@ Page({
                   })
                   app.globalData.userid = 's'+ next.data[0].sid;
                   app.globalData.username = next.data[0].s_name;
+                  app.globalData.studentInfo = next.data[0];
                   wx.setStorage({
                     key: 'student',
                     data: next.data,

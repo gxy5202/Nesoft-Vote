@@ -13,7 +13,8 @@ Page({
     bottomText: "下拉加载更多",
     value:"",
     hotName:[],
-    focus:true
+    focus:true,
+    aid:''
   },
 
   /**
@@ -21,6 +22,9 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    that.setData({
+      aid: Number(options.aid)
+    });
     wx.showLoading({
       title: '加载中...',
     })
@@ -64,8 +68,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    var that =this
-    var arr = []
+    var that =this;
+    let aid = that.data.aid
+    var arr = [];
     var searchData = that.data.searchData
     console.log(searchData)
     var key = wx.getStorageSync("key"); 
@@ -80,6 +85,7 @@ Page({
               code: res.code,
               Appid: "wx9e7455bc8709d727",
               AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+              aid: aid
             },
             header: {
               'content-type': 'application/json'
@@ -208,6 +214,7 @@ Page({
   imgSearch:function(){
     
     var that = this
+    let aid = that.data.aid
     var searchData = that.data.searchData
     if (searchData == "") {
       wx.showToast({
@@ -229,11 +236,13 @@ Page({
               code: res.code,
               Appid: "wx9e7455bc8709d727",
               AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+              aid: aid
             },
             header: {
               'content-type': 'application/json'
             },
             success: function (res) {
+              console.log(res.data)
               var arr = []
               for (var x in res.data) {
                 if (res.data[x].d_id.indexOf(searchData) != -1) {
@@ -307,7 +316,7 @@ Page({
                       'block': "flex",
                     })
                   }
-                } else if (res.data[x].t_name.indexOf(searchData) != -1) {
+                } else if (res.data[x].a_name.indexOf(searchData) != -1) {
                   arr.push(res.data[x])
                   if (arr.length <= 10) {
                     that.setData({
@@ -358,6 +367,7 @@ Page({
   },
   getNumber: function(e){
     var that = this
+    let aid = that.data.aid;
     var number = e.detail.value;
     that.setData({
       searchData:number
@@ -393,6 +403,7 @@ Page({
               code: res.code,
               Appid: "wx9e7455bc8709d727",
               AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+              aid:aid
             },
             header: {
               'content-type': 'application/json'
@@ -477,7 +488,7 @@ Page({
                       searchData: number
                     })
                   }
-                } else if (res.data[x].t_name.indexOf(number) != -1) {
+                } else if (res.data[x].a_name.indexOf(number) != -1) {
                   arr.push(res.data[x])
                   if (arr.length <= 10) {
                     that.setData({
@@ -546,7 +557,8 @@ Page({
   },
 
   toSearch:function(e){
-    var that = this
+    var that = this;
+    let aid = that.data.aid
     var value = e.currentTarget.dataset.name
     that.setData({
       value:value,
@@ -564,6 +576,7 @@ Page({
             code: res.code,
             Appid: "wx9e7455bc8709d727",
             AppSecret: "66dbfa9fcf37f5b381bcac0532400da8",
+            aid:aid
           },
           header: {
             'content-type': 'application/json'
@@ -651,7 +664,7 @@ Page({
                     'searchData': value
                   })
                 }
-              } else if (res.data[x].t_name.indexOf(value) != -1) {
+              } else if (res.data[x].a_name.indexOf(value) != -1) {
                 arr.push(res.data[x])
                 if (arr.length <= 10) {
                   that.setData({

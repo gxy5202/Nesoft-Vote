@@ -1,0 +1,102 @@
+.container {
+  .upload-img {
+      width:100%;
+      height: 300rpx;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      .preview {
+          width: 100%;
+          //height: 400rpx;
+          object-fit: cover;
+      }
+      text {
+          font-size: 30rpx;
+          color:rgba(0,0,0,0.2)
+      }
+      
+  }
+  van-popup {
+      z-index: 999;
+  }
+  .ac-name,.ac-vid,.ac-range,.ac-startDate,.ac-endDate,.ac-rate,.ac-describe{
+      margin:auto;
+      padding:20rpx;
+      width: 95%;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      picker {
+          width: 70%;
+          text-align: right;
+          input {
+              width: 100%;
+              margin-right: 10rpx;
+          }
+      }
+      .range-text {
+          color:rgba(0,0,0,0.2);
+      }
+      text {
+          margin-left: 10rpx;
+      }
+      input,.date {
+          margin-right: 10rpx;
+          width: 70%;
+          font-size: 35rpx;
+          
+          text-align: right;
+      }
+      
+      
+  }
+  .ac-describe {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    textarea {
+      width: 100%;
+    }
+    .display-img {
+      position: relative;
+      width:100%;
+      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      .imgList {
+        position: relative;
+        width: 100rpx;
+        height: 100rpx;
+        border: 1px solid rgba(0,0,0,0.2);
+        margin-right: 14rpx;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+        van-icon {
+          position: absolute;
+          right:-8rpx;
+          top:-20rpx;
+        }
+      }
+      .add-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100rpx;
+        height: 100rpx;
+        border: 1px solid rgba(0,0,0,0.2);
+        
+      }
+    }
+  }
+  .btn {
+      width: 95%;
+      background: rgb(0,106,204);
+      color:rgb(255,255,255)
+  }
+  
+  
+}

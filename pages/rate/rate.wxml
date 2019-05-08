@@ -5,8 +5,25 @@
   <view class='rate-box'>
 
   <!-- 循环渲染的评分列表 -->
+    <!-- <swiper>
+      <swiper-item class="rate-item" wx:for="{{rate}}" wx:key="item.index">
+        <input type='text' placeholder='评分标准名称' value="{{item.rateName}}" bindinput='addName' data-index="{{index}}"></input> -->
+      <!-- 选择评分比例 -->
+      <!-- <picker bindchange='bindPickerChange' value="{{index}}" range="{{rateRange}}" data-index="{{index}}">
+        <view>
+          <text wx:if="{{item.ratePct === ''}}">所占百分比</text> 
+          <text wx:else>比重：{{item.ratePct}}</text>
+        </view>
+      </picker> -->
+      <!-- 选择评分比例 -->
+      <!-- <van-icon name="close" size="30px" bind:click="removeItem" data-id="{{index}}"/>
+      </swiper-item>
+    </swiper> -->
+
+    
     <view class="rate-item" wx:for="{{rate}}" wx:key="item.index">
       <input type='text' placeholder='评分标准名称' value="{{item.rateName}}" bindinput='addName' data-index="{{index}}"></input>
+
       <!-- 选择评分比例 -->
       <picker bindchange='bindPickerChange' value="{{index}}" range="{{rateRange}}" data-index="{{index}}">
         <view>

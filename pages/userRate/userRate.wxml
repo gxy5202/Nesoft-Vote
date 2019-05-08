@@ -8,6 +8,6 @@
         <van-rate wx:if="{{already == 2}}" value="{{ item.value }}" size="30" readonly bind:change="onChange" data-index="{{index}}"/>
     </view>
   </view>
-
+  <van-toast id="van-toast" />
   <button wx:if="{{already == 0}}" bindtap='confirm'>确认</button>
 </view>

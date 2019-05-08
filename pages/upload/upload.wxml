@@ -1,11 +1,63 @@
-<!--pages/upload/upload.wxml-->
-<view class="container">
-  <view>
-    <view>
-      <form>
-        <input type='text'></input>
-        <input></input>
-      </form>
+<!--pages/publish/publish.wxml-->
+<!-- 发布活动 -->
+<view class='container'>
+  <view class="">
+    <!-- 添加封面图片 -->
+    <view class="upload-img" bindtap='upload'>
+      <van-icon wx:if="{{imgUrl === ''}}" name="plus" size="80px" color="rgba(0,0,0,0.2)" />
+      <text wx:if="{{imgUrl === ''}}">添加作品海报</text>
+      <image class="preview" wx:if="{{imgUrl !== ''}}" src="{{imgUrl}}" mode="aspectFill"></image>
     </view>
+    
+    <van-cell-group>
+      <!-- 活动名称 -->
+      <view class="ac-name">
+        <text>作品名称：</text>
+        <input placeholder="请输入作品名称" auto-focus bindinput='acName'/>
+      </view>
+
+      <view class="ac-name">
+        <text>作者：</text>
+        <input placeholder="请输入作者姓名" auto-focus bindinput='stName' value="{{d_st_name}}"/>
+      </view>
+
+      <view class="ac-vid" wx:if="{{imgList.length === 0}}">
+        <text>视频：</text>
+        <input placeholder="腾讯视频vid(可选)" auto-focus bindinput='acVideo' />
+      </view>
+
+      <!-- 活动描述 -->
+      <view class="ac-describe">
+        <textarea
+          style="display:{{showMask}}"
+          placeholder="这里描述作品详细信息"
+          placeholder-style="color:rgba(0,0,0,0.2);"
+          bindinput='acDes'
+          maxlength=-1
+        />
+        <!-- 添加封面图片 -->
+        <view class="display-img">
+          <view class="imgList" wx:if="{{imgList.length != 0}}" wx:for="{{imgList}}">
+            <van-icon name="clear" bind:click="deleteImg" data-index="{{index}}"></van-icon>
+            <image src="{{item}}"></image>
+          </view>
+          
+          <view wx:if="{{imgList.length < 6 && showImg == true}}" class="add-img" bindtap='addImg'>
+            <van-icon name="plus" size="40px" color="rgba(0,0,0,0.2)" />
+          </view>
+          
+        </view>
+        
+      </view>
+
+      <button
+        class="btn"
+        type="default"
+        bindtap="publish"
+        hover-class="other-button-hover"
+      >
+        上传
+      </button>
+    </van-cell-group>
   </view>
 </view>

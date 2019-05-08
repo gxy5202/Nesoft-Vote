@@ -1,1 +1,12 @@
-{}
+{
+  "usingComponents": {
+    "van-icon": "../miniprogram_npm/vant-weapp/icon/index",
+    "van-cell": "../miniprogram_npm/vant-weapp/cell/index",
+    "van-cell-group": "../miniprogram_npm/vant-weapp/cell-group/index",
+    "van-datetime-picker": "../miniprogram_npm/vant-weapp/datetime-picker/index",
+    "van-popup": "../miniprogram_npm/vant-weapp/popup/index",
+    "van-field": "../miniprogram_npm/vant-weapp/field/index",
+    "van-collapse": "../miniprogram_npm/vant-weapp/collapse/index",
+    "van-collapse-item": "../miniprogram_npm/vant-weapp/collapse-item/index"
+  }
+}

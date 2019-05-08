@@ -1,4 +1,5 @@
 // pages/userRate/userRate.js
+import Toast from '../../miniprogram_npm/vant-weapp/toast/toast';
 Page({
 
   /**
@@ -151,10 +152,7 @@ Page({
     let rateData = that.data.rateData;
     let rateNum = that.data.rateNum;
     let fakeScore = that.data.fakeScore;
-    wx.showLoading({
-      title: '请稍等..',
-      mask:true
-    })
+    
     rateData.map(function(val,index,arr){
       rateNum.push(val.score);
       fakeScore.push(parseInt(val.score / (val.ratePct * 10 / 5)));
@@ -166,6 +164,10 @@ Page({
       return pre + next; 
     })
     if(total > 0){
+      Toast.loading({
+        mask: true,
+        message: '提交评分中...'
+      });
       wx.login({
         success: function (res) {
           wx.request({
@@ -183,7 +185,7 @@ Page({
             },
             success: function (res) {
               console.log(res.data);
-              wx.hideLoading();
+              Toast.clear();
               wx.showToast({
                 title: '评分成功',
               })
@@ -204,7 +206,7 @@ Page({
                   }
                 }
               })
-            }
+            },
 
           })
         }

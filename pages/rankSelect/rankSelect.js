@@ -63,7 +63,7 @@ Page({
       success: res => {
         
         wx.request({
-          url: 'https://www.nsuim.cn/data',
+          url: 'https://www.nsuim.cn/rank_data',
           data: {
             code: res.code,
             Appid: "wx9e7455bc8709d727",
@@ -73,6 +73,7 @@ Page({
             'content-type': 'application/json'
           },
           success: function (res) {
+            console.log(res.data)
             wx.hideLoading()
             function compare(pro) {
               return function (obj1, obj2) {

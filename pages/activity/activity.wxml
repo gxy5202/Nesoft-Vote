@@ -15,7 +15,7 @@
     </view>
   <view class="ac-list">
     <view class="ac-item" wx:for="{{activity_data}}" wx:key="item.aid" bindtap='toIndex' data-aid="{{item.aid}}"
-     data-starttime="{{item.a_startTime}}" data-endtime="{{item.a_endTime}}">
+     data-starttime="{{item.a_startTime}}" data-endtime="{{item.a_endTime}}" data-info="{{item}}">
       <view class="ac-img">
         <image src="{{item.a_img}}" mode="aspectFill"></image>
       </view>

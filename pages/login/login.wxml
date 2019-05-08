@@ -1,8 +1,10 @@
 <view class='container'>
    <view class="user-type">
-      <view class='teacher' bindtap='toTeacher'>
+      <!-- <button class='teacher' open-type="getUserInfo" bindgetuserinfo="getUserInfo">我是老师</button> -->
+      <view  bindtap='toTeacher'>
           <view>我是老师</view>
       </view>
+      <!-- <button class='student' open-type="getUserInfo" bindgetuserinfo="getUserInfo">我是学生</button> -->
       <view class='student' bindtap='toStudent'>
           <view>我是学生</view>
       </view>

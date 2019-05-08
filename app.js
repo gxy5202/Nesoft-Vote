@@ -70,7 +70,9 @@ App({
            console.log(next.data);
            if(next.data[0].sid){
              that.globalData.userid ='s' + next.data[0].sid;
-             that.globalData.username = next.data[0].s_name
+             that.globalData.username = next.data[0].s_name;
+             that.globalData.studentInfo = next.data[0];
+             console.log(that.globalData.studentInfo)
            }
            else if (next.data[0].tid){
              that.globalData.userid = 't' + next.data[0].tid,
@@ -91,6 +93,7 @@ App({
     userid:'',
     username:'',
     userInfo: "",
+    studentInfo:"",
     js_code: "",
     openid: "",
     session_key: "",
